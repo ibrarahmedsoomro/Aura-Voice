@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 3.846,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "hello azeem kuti kyaa haaal hy tumhara",
+      "spoken_normalized": "hello azeem kuti kyaa haaal hy tumhara",
+      "start": 0.15,
+      "end": 3.846,
+      "duration": 3.696,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

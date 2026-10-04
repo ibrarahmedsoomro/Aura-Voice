@@ -1,0 +1,26 @@
+{
+  "total_duration_seconds": 7.368,
+  "chunks_count": 2,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "The storm grew intense.",
+      "spoken_normalized": "The storm grew intense.",
+      "start": 0.3,
+      "end": 3.036,
+      "duration": 2.736,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "The lighthouse beacon flickered in the dark.",
+      "spoken_normalized": "The lighthouse beacon flickered in the dark.",
+      "start": 3.936,
+      "end": 7.368,
+      "duration": 3.432,
+      "emotion": "suspense",
+      "speed": 0.92
+    }
+  ]
+}

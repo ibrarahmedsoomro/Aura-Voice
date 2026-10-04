@@ -1,0 +1,12 @@
+{
+  "ur-PK-AsadNeural": {
+    "uses": 3,
+    "qc_successes": 3,
+    "confidence": 1.0
+  },
+  "en-US-ChristopherNeural": {
+    "uses": 5,
+    "qc_successes": 5,
+    "confidence": 1.0
+  }
+}

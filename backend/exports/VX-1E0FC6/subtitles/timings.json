@@ -1,0 +1,26 @@
+{
+  "total_duration_seconds": 8.376,
+  "chunks_count": 2,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "The radar signal suddenly vanished.",
+      "spoken_normalized": "The radar signal suddenly vanished.",
+      "start": 0.3,
+      "end": 3.516,
+      "duration": 3.216,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "The commander ordered all units to stand by.",
+      "spoken_normalized": "The commander ordered all units to stand by.",
+      "start": 4.416,
+      "end": 8.376,
+      "duration": 3.96,
+      "emotion": "suspense",
+      "speed": 0.92
+    }
+  ]
+}
