@@ -1,0 +1,76 @@
+{
+  "total_duration_seconds": 18.262,
+  "chunks_count": 7,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "The old castle gates opened slowly.",
+      "spoken_normalized": "The old castle gates opened slowly.",
+      "start": 0.3,
+      "end": 3.708,
+      "duration": 3.408,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "Everyone stay alert.",
+      "spoken_normalized": "Everyone stay alert.",
+      "start": 4.458,
+      "end": 6.33,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 3,
+      "text": "You should never have come here.",
+      "spoken_normalized": "You should never have come here.",
+      "start": 6.83,
+      "end": 9.278,
+      "duration": 2.448,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 4,
+      "text": "Wait.",
+      "spoken_normalized": "Wait.",
+      "start": 9.778,
+      "end": 10.594,
+      "duration": 0.816,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 5,
+      "text": "Those symbols are not decorative.",
+      "spoken_normalized": "Those symbols are not decorative.",
+      "start": 11.094,
+      "end": 13.374,
+      "duration": 2.28,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 6,
+      "text": "What do you mean?",
+      "spoken_normalized": "What do you mean?",
+      "start": 13.874,
+      "end": 15.746,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 7,
+      "text": "They are a warning.",
+      "spoken_normalized": "They are a warning.",
+      "start": 16.246,
+      "end": 18.262,
+      "duration": 2.016,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

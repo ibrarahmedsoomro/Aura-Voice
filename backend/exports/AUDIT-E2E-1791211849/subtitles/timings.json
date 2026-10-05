@@ -1,0 +1,36 @@
+{
+  "total_duration_seconds": 9.734,
+  "chunks_count": 3,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "The old castle gates opened slowly.",
+      "spoken_normalized": "The old castle gates opened slowly.",
+      "start": 0.3,
+      "end": 3.708,
+      "duration": 3.408,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "Everyone stay alert.",
+      "spoken_normalized": "Everyone stay alert.",
+      "start": 4.458,
+      "end": 6.786,
+      "duration": 2.328,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 3,
+      "text": "You should never have come here.",
+      "spoken_normalized": "You should never have come here.",
+      "start": 7.286,
+      "end": 9.734,
+      "duration": 2.448,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

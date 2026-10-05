@@ -1,0 +1,426 @@
+{
+  "total_duration_seconds": 228.154,
+  "chunks_count": 42,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "00\u2013zero:twenty \u2014 Hook",
+      "spoken_normalized": "00\u2013zero:twenty \u2014 Hook",
+      "start": 0.15,
+      "end": 4.062,
+      "duration": 3.912,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 2,
+      "text": "nineteen thirty-nine.",
+      "spoken_normalized": "nineteen thirty-nine.",
+      "start": 4.562,
+      "end": 6.842,
+      "duration": 2.28,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 3,
+      "text": "Europe stood on the edge of catastrophe.",
+      "spoken_normalized": "Europe stood on the edge of catastrophe.",
+      "start": 7.342,
+      "end": 10.486,
+      "duration": 3.144,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 4,
+      "text": "Within months,",
+      "spoken_normalized": "Within months,",
+      "start": 10.986,
+      "end": 12.906,
+      "duration": 1.92,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 5,
+      "text": "a conflict that began in Europe would expand across continents and oceans,",
+      "spoken_normalized": "a conflict that began in Europe would expand across continents and oceans,",
+      "start": 13.406,
+      "end": 18.374,
+      "duration": 4.968,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 6,
+      "text": "drawing dozens of nations and hundreds of millions of people into the deadliest war in human history.",
+      "spoken_normalized": "drawing dozens of nations and hundreds of millions of people into the deadliest war in human history.",
+      "start": 18.974,
+      "end": 25.358,
+      "duration": 6.384,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 7,
+      "text": "twenty\u2013zero:fifty \u2014 The Beginning",
+      "spoken_normalized": "twenty\u2013zero:fifty \u2014 The Beginning",
+      "start": 26.008,
+      "end": 29.752,
+      "duration": 3.744,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 8,
+      "text": "On September 1st, nineteen thirty-nine, Nazi Germany invaded Poland.",
+      "spoken_normalized": "On September 1st, nineteen thirty-nine, Nazi Germany invaded Poland.",
+      "start": 30.252,
+      "end": 35.892,
+      "duration": 5.64,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 9,
+      "text": "Britain and France responded by declaring war on Germany.",
+      "spoken_normalized": "Britain and France responded by declaring war on Germany.",
+      "start": 36.492,
+      "end": 40.86,
+      "duration": 4.368,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 10,
+      "text": "What followed was a rapid German offensive across Europe, using coordinated tanks, aircraft, and infantry in a strategy that became known as Blitzkrieg.",
+      "spoken_normalized": "What followed was a rapid German offensive across Europe, using coordinated tanks, aircraft, and infantry in a strategy that became known as Blitzkrieg.",
+      "start": 41.51,
+      "end": 51.038,
+      "duration": 9.528,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 11,
+      "text": "fifty\u2013one:twenty \u2014 Europe Falls",
+      "spoken_normalized": "fifty\u2013one:twenty \u2014 Europe Falls",
+      "start": 51.538,
+      "end": 55.354,
+      "duration": 3.816,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 12,
+      "text": "By nineteen forty, German forces had occupied much of Western Europe.",
+      "spoken_normalized": "By nineteen forty, German forces had occupied much of Western Europe.",
+      "start": 55.854,
+      "end": 60.894,
+      "duration": 5.04,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 13,
+      "text": "France fell, while Britain resisted through the Battle of Britain.",
+      "spoken_normalized": "France fell, while Britain resisted through the Battle of Britain.",
+      "start": 61.494,
+      "end": 66.03,
+      "duration": 4.536,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 14,
+      "text": "In the skies above Britain, the Royal Air Force fought to prevent a German invasion.",
+      "spoken_normalized": "In the skies above Britain, the Royal Air Force fought to prevent a German invasion.",
+      "start": 66.68,
+      "end": 72.176,
+      "duration": 5.496,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 15,
+      "text": "But the war was about to become even larger.",
+      "spoken_normalized": "But the war was about to become even larger.",
+      "start": 72.776,
+      "end": 76.304,
+      "duration": 3.528,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 16,
+      "text": "twenty\u2013one:fifty \u2014 The War Becomes Global",
+      "spoken_normalized": "twenty\u2013one:fifty \u2014 The War Becomes Global",
+      "start": 77.054,
+      "end": 81.614,
+      "duration": 4.56,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 17,
+      "text": "In June nineteen forty-one, Germany launched Operation Barbarossa, invading the Soviet Union and opening the massive Eastern Front.",
+      "spoken_normalized": "In June nineteen forty-one, Germany launched Operation Barbarossa, invading the Soviet Union and opening the massive Eastern Front.",
+      "start": 82.264,
+      "end": 90.856,
+      "duration": 8.592,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 18,
+      "text": "Then, on December 7th, nineteen forty-one, Japan attacked Pearl Harbor.",
+      "spoken_normalized": "Then, on December 7th, nineteen forty-one, Japan attacked Pearl Harbor.",
+      "start": 91.356,
+      "end": 97.164,
+      "duration": 5.808,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 19,
+      "text": "The United States entered the war, transforming the conflict into a truly global struggle.",
+      "spoken_normalized": "The United States entered the war, transforming the conflict into a truly global struggle.",
+      "start": 97.764,
+      "end": 103.884,
+      "duration": 6.12,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 20,
+      "text": "From North Africa to the Pacific, from the Atlantic Ocean to the Eastern Front, enormous armies and fleets were now engaged in battle.",
+      "spoken_normalized": "From North Africa to the Pacific, from the Atlantic Ocean to the Eastern Front, enormous armies and fleets were now engaged in battle.",
+      "start": 104.634,
+      "end": 113.754,
+      "duration": 9.12,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 21,
+      "text": "fifty\u2013two:twenty \u2014 Turning Point",
+      "spoken_normalized": "fifty\u2013two:twenty \u2014 Turning Point",
+      "start": 114.404,
+      "end": 118.028,
+      "duration": 3.624,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 22,
+      "text": "The Axis powers initially appeared unstoppable.",
+      "spoken_normalized": "The Axis powers initially appeared unstoppable.",
+      "start": 118.528,
+      "end": 122.344,
+      "duration": 3.816,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 23,
+      "text": "But during nineteen forty-two and nineteen forty-three, the momentum began to change.",
+      "spoken_normalized": "But during nineteen forty-two and nineteen forty-three, the momentum began to change.",
+      "start": 122.844,
+      "end": 128.532,
+      "duration": 5.688,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 24,
+      "text": "The Battle of Midway weakened Japanese naval power in the Pacific.",
+      "spoken_normalized": "The Battle of Midway weakened Japanese naval power in the Pacific.",
+      "start": 129.132,
+      "end": 133.86,
+      "duration": 4.728,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 25,
+      "text": "In North Africa, Allied forces pushed back Axis armies.",
+      "spoken_normalized": "In North Africa, Allied forces pushed back Axis armies.",
+      "start": 134.51,
+      "end": 139.334,
+      "duration": 4.824,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 26,
+      "text": "And at Stalingrad, Soviet forces surrounded and defeated a major German army.",
+      "spoken_normalized": "And at Stalingrad, Soviet forces surrounded and defeated a major German army.",
+      "start": 139.834,
+      "end": 145.498,
+      "duration": 5.664,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 27,
+      "text": "The tide of the war had begun to turn.",
+      "spoken_normalized": "The tide of the war had begun to turn.",
+      "start": 146.098,
+      "end": 149.266,
+      "duration": 3.168,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 28,
+      "text": "twenty\u2013two:45 \u2014 D-Day and the Collapse of Nazi Germany",
+      "spoken_normalized": "twenty\u2013two:45 \u2014 D-Day and the Collapse of Nazi Germany",
+      "start": 150.016,
+      "end": 155.704,
+      "duration": 5.688,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 29,
+      "text": "On June 6th, nineteen forty-four, Allied forces launched D-Day, landing on the beaches of Normandy.",
+      "spoken_normalized": "On June 6th, nineteen forty-four, Allied forces launched D-Day, landing on the beaches of Normandy.",
+      "start": 156.354,
+      "end": 163.602,
+      "duration": 7.248,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 30,
+      "text": "The invasion opened a new front in Western Europe.",
+      "spoken_normalized": "The invasion opened a new front in Western Europe.",
+      "start": 164.102,
+      "end": 167.702,
+      "duration": 3.6,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 31,
+      "text": "Allied armies pushed toward Germany while Soviet forces advanced from the east.",
+      "spoken_normalized": "Allied armies pushed toward Germany while Soviet forces advanced from the east.",
+      "start": 168.202,
+      "end": 173.506,
+      "duration": 5.304,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 32,
+      "text": "In May nineteen forty-five, Nazi Germany surrendered.",
+      "spoken_normalized": "In May nineteen forty-five, Nazi Germany surrendered.",
+      "start": 174.006,
+      "end": 178.35,
+      "duration": 4.344,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 33,
+      "text": "45\u2013three:00 \u2014 The Pacific and the Legacy",
+      "spoken_normalized": "45\u2013three:00 \u2014 The Pacific and the Legacy",
+      "start": 178.85,
+      "end": 183.914,
+      "duration": 5.064,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 34,
+      "text": "The war continued against Japan until August nineteen forty-five, when atomic bombs were dropped on Hiroshima and Nagasaki.",
+      "spoken_normalized": "The war continued against Japan until August nineteen forty-five, when atomic bombs were dropped on Hiroshima and Nagasaki.",
+      "start": 184.514,
+      "end": 193.106,
+      "duration": 8.592,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 35,
+      "text": "Japan surrendered shortly afterward.",
+      "spoken_normalized": "Japan surrendered shortly afterward.",
+      "start": 193.756,
+      "end": 196.756,
+      "duration": 3.0,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 36,
+      "text": "World War II had ended.",
+      "spoken_normalized": "World War II had ended.",
+      "start": 197.356,
+      "end": 199.948,
+      "duration": 2.592,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 37,
+      "text": "More than sixty million people had died.",
+      "spoken_normalized": "More than sixty million people had died.",
+      "start": 200.598,
+      "end": 203.766,
+      "duration": 3.168,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 38,
+      "text": "Nations had been destroyed, borders redrawn, and a new global order emerged.",
+      "spoken_normalized": "Nations had been destroyed, borders redrawn, and a new global order emerged.",
+      "start": 204.266,
+      "end": 209.906,
+      "duration": 5.64,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 39,
+      "text": "The war was over\u2014but its consequences would shape the world for generations.",
+      "spoken_normalized": "The war was over\u2014but its consequences would shape the world for generations.",
+      "start": 210.506,
+      "end": 216.17,
+      "duration": 5.664,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 40,
+      "text": "End screen:",
+      "spoken_normalized": "End screen:",
+      "start": 216.82,
+      "end": 218.692,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 41,
+      "text": "World War II \u2014 nineteen thirty-nine\u2013nineteen forty-five",
+      "spoken_normalized": "World War II \u2014 nineteen thirty-nine\u2013nineteen forty-five",
+      "start": 219.292,
+      "end": 224.188,
+      "duration": 4.896,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 42,
+      "text": "The war that changed the modern world.",
+      "spoken_normalized": "The war that changed the modern world.",
+      "start": 224.938,
+      "end": 228.154,
+      "duration": 3.216,
+      "emotion": "dramatic",
+      "speed": 0.95
+    }
+  ]
+}

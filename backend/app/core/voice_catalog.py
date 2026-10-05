@@ -1,8 +1,9 @@
 from typing import List, Optional, Dict, Any
 from ..models.schemas import VoiceProfile
 
+# Comprehensive Character & Narrative Voice Library
 VOICE_CATALOG: Dict[str, VoiceProfile] = {
-    # English Voices
+    # --- CINEMATIC, ACTION & TRAILER (MALES) ---
     "vox-cinematic-male": VoiceProfile(
         voice_id="en-US-ChristopherNeural",
         name="Aura Christopher",
@@ -12,26 +13,108 @@ VOICE_CATALOG: Dict[str, VoiceProfile] = {
         style="Cinematic",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Deep, resonant, dramatic narrator ideal for movies, WWII history, and horror trailers.",
+        description="Deep, resonant, dramatic narrator for movie trailers, WWII history, and horror epics.",
         is_authorized=True,
         qc_rating=0.99
     ),
+    "vox-villain-dark": VoiceProfile(
+        voice_id="en-GB-RyanNeural",
+        name="Aura Ryan (British Dark / Villain)",
+        gender="Male",
+        language="en",
+        locale="en-GB",
+        style="Cinematic",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Intense, aristocratic British accent suited for sinister villains, dark fantasy, and mystery.",
+        is_authorized=True,
+        qc_rating=0.98
+    ),
+    "vox-heroic-commander": VoiceProfile(
+        voice_id="en-US-BrianMultilingualNeural",
+        name="Aura Brian (Action Commander)",
+        gender="Male",
+        language="en",
+        locale="en-US",
+        style="Dramatic",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Strong, commanding, resolute soldier/hero voice for war archives and action scenes.",
+        is_authorized=True,
+        qc_rating=0.98
+    ),
+
+    # --- DOCUMENTARY & MATURE STORYTELLERS (MALES) ---
     "vox-documentary-male": VoiceProfile(
         voice_id="en-US-GuyNeural",
-        name="Aura Guy",
+        name="Aura Guy (Documentary Lead)",
         gender="Male",
         language="en",
         locale="en-US",
         style="Documentary",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Authoritative, calm, clear documentary narrator suited for long-form explainers.",
+        description="Authoritative, calm, credible voice designed for BBC/NatGeo style explainers.",
         is_authorized=True,
         qc_rating=0.98
     ),
+    "vox-vintage-sage": VoiceProfile(
+        voice_id="en-US-RogerNeural",
+        name="Aura Roger (Wise Elder / Vintage Radio)",
+        gender="Male",
+        language="en",
+        locale="en-US",
+        style="Storyteller",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Mature, gravelly, wise storyteller ideal for ancient legends, grandpa tales, and 1940s radio.",
+        is_authorized=True,
+        qc_rating=0.97
+    ),
+    "vox-british-gentleman": VoiceProfile(
+        voice_id="en-GB-ThomasNeural",
+        name="Aura Thomas (Victorian Gentleman)",
+        gender="Male",
+        language="en",
+        locale="en-GB",
+        style="Documentary",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Refined, classical English enunciation for literature, poetry, and historical archives.",
+        is_authorized=True,
+        qc_rating=0.97
+    ),
+    "vox-modern-explainer": VoiceProfile(
+        voice_id="en-US-AndrewMultilingualNeural",
+        name="Aura Andrew (Warm Explainer)",
+        gender="Male",
+        language="en",
+        locale="en-US",
+        style="Conversational",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Warm, approachable educator for tech tutorials, science videos, and audiobooks.",
+        is_authorized=True,
+        qc_rating=0.97
+    ),
+    "vox-creator-podcast": VoiceProfile(
+        voice_id="en-US-EricNeural",
+        name="Aura Eric (Young Creator)",
+        gender="Male",
+        language="en",
+        locale="en-US",
+        style="Conversational",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Youthful, fast-paced, vibrant creator voice for TikToks, Reels, and modern podcasts.",
+        is_authorized=True,
+        qc_rating=0.96
+    ),
+
+    # --- FEMALE CHARACTERS & STORYTELLERS ---
     "vox-storyteller-female": VoiceProfile(
         voice_id="en-US-JennyNeural",
-        name="Aura Jenny",
+        name="Aura Jenny (Expressive Storyteller)",
         gender="Female",
         language="en",
         locale="en-US",
@@ -40,100 +123,152 @@ VOICE_CATALOG: Dict[str, VoiceProfile] = {
         license_type="LICENSED_PROVIDER",
         description="Warm, highly expressive storytelling voice with natural inflection and emotional range.",
         is_authorized=True,
-        qc_rating=0.98
+        qc_rating=0.99
     ),
     "vox-dramatic-female": VoiceProfile(
         voice_id="en-US-AriaNeural",
-        name="Aura Aria",
+        name="Aura Aria (Dynamic Thriller)",
         gender="Female",
         language="en",
         locale="en-US",
         style="Dramatic",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Dynamic, crisp voice with exceptional pacing for thrilling stories and commercial narration.",
+        description="Dynamic, crisp voice with exceptional dramatic pacing for thrilling suspense stories.",
+        is_authorized=True,
+        qc_rating=0.98
+    ),
+    "vox-gentle-whisper": VoiceProfile(
+        voice_id="en-US-AvaMultilingualNeural",
+        name="Aura Ava (Soft & Melancholic)",
+        gender="Female",
+        language="en",
+        locale="en-US",
+        style="Storyteller",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Gentle, intimate, soft-spoken voice for emotional poetry, bedtime stories, and whispers.",
         is_authorized=True,
         qc_rating=0.97
     ),
-    "vox-british-historian": VoiceProfile(
-        voice_id="en-GB-RyanNeural",
-        name="Aura Ryan",
-        gender="Male",
+    "vox-authoritative-female": VoiceProfile(
+        voice_id="en-US-EmmaMultilingualNeural",
+        name="Aura Emma (News Anchor)",
+        gender="Female",
         language="en",
-        locale="en-GB",
+        locale="en-US",
         style="Documentary",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Sophisticated British accent, excellent for vintage war archives, literature, and mystery.",
+        description="Polished, authoritative broadcast voice suitable for corporate news and medical explainers.",
+        is_authorized=True,
+        qc_rating=0.98
+    ),
+    "vox-british-queenly": VoiceProfile(
+        voice_id="en-GB-SoniaNeural",
+        name="Aura Sonia (British Elegant)",
+        gender="Female",
+        language="en",
+        locale="en-GB",
+        style="Dramatic",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Aristocratic, poised British female voice for period dramas and royal biographies.",
         is_authorized=True,
         qc_rating=0.97
     ),
-    "vox-modern-podcast": VoiceProfile(
-        voice_id="en-US-EricNeural",
-        name="Aura Eric",
-        gender="Male",
+    "vox-young-female": VoiceProfile(
+        voice_id="en-US-AnaNeural",
+        name="Aura Ana (Young / Animated Character)",
+        gender="Female",
         language="en",
         locale="en-US",
         style="Conversational",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Youthful, engaging, fast-paced voice tailored for short-form Reels, TikToks, and podcasts.",
+        description="Bright, youthful girl/character voice for animation, fairy tales, and cheerful dialogues.",
         is_authorized=True,
         qc_rating=0.96
     ),
-    
-    # Urdu Voices (Authentic PK)
+
+    # --- URDU & PAKISTANI CHARACTERS (اردو) ---
     "vox-urdu-asad": VoiceProfile(
         voice_id="ur-PK-AsadNeural",
-        name="Aura Asad",
+        name="Aura Asad (Urdu Deep Narration)",
         gender="Male",
         language="ur",
         locale="ur-PK",
         style="Documentary",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Solemn, clear Urdu narrator suitable for stories, history, poetry, and Roman Urdu scripts.",
+        description="Solemn, heavy Urdu narrator for tarikh, afsanay, horror mystery, and Roman Urdu scripts.",
         is_authorized=True,
-        qc_rating=0.98
+        qc_rating=0.99
     ),
     "vox-urdu-uzma": VoiceProfile(
         voice_id="ur-PK-UzmaNeural",
-        name="Aura Uzma",
+        name="Aura Uzma (Urdu Eloquent Storyteller)",
         gender="Female",
         language="ur",
         locale="ur-PK",
         style="Storyteller",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Gentle, eloquent Urdu voice with pristine enunciation for audiobooks and dramatic tales.",
+        description="Gentle, sweet Urdu voice with flawless adab and talaffuz for audiobooks and dramatic tales.",
+        is_authorized=True,
+        qc_rating=0.99
+    ),
+
+    # --- HINDI & HINGLISH CHARACTERS ---
+    "vox-hindi-madhur": VoiceProfile(
+        voice_id="hi-IN-MadhurNeural",
+        name="Aura Madhur (Hindi Dramatic Hero)",
+        gender="Male",
+        language="hi",
+        locale="hi-IN",
+        style="Dramatic",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Dynamic, theatrical Hindi and Hinglish voice for cinematic stories and podcasts.",
         is_authorized=True,
         qc_rating=0.98
     ),
-    
-    # Hindi / Hinglish Voices
-    "vox-hindi-madhur": VoiceProfile(
-        voice_id="hi-IN-MadhurNeural",
-        name="Aura Madhur",
-        gender="Male",
+    "vox-hindi-swara": VoiceProfile(
+        voice_id="hi-IN-SwaraNeural",
+        name="Aura Swara (Hindi Warm Narrator)",
+        gender="Female",
         language="hi",
         locale="hi-IN",
         style="Storyteller",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Dynamic Hindi and Hinglish narrator with vivid tone modulation.",
+        description="Warm, versatile Hindi female narrator with rich expression and storytelling cadence.",
         is_authorized=True,
-        qc_rating=0.97
+        qc_rating=0.98
     ),
-    "vox-hindi-swara": VoiceProfile(
-        voice_id="hi-IN-SwaraNeural",
-        name="Aura Swara",
+    "vox-indian-english-female": VoiceProfile(
+        voice_id="en-IN-NeerjaExpressiveNeural",
+        name="Aura Neerja (Indian English Expressive)",
         gender="Female",
-        language="hi",
-        locale="hi-IN",
+        language="en",
+        locale="en-IN",
         style="Conversational",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Warm, versatile Hindi voice for narrative explainers and character dialogue.",
+        description="Articulate, natural Indian English accent for international business and modern storytelling.",
+        is_authorized=True,
+        qc_rating=0.97
+    ),
+    "vox-indian-english-male": VoiceProfile(
+        voice_id="en-IN-PrabhatNeural",
+        name="Aura Prabhat (Indian English Male)",
+        gender="Male",
+        language="en",
+        locale="en-IN",
+        style="Documentary",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Clear, authoritative Indian English male voice for documentaries and educational series.",
         is_authorized=True,
         qc_rating=0.97
     )
@@ -143,8 +278,14 @@ def get_all_voices() -> List[VoiceProfile]:
     return list(VOICE_CATALOG.values())
 
 def find_voice_by_id_or_profile(voice_id: str) -> Optional[VoiceProfile]:
+    if not voice_id:
+        return None
     for key, v in VOICE_CATALOG.items():
-        if key == voice_id or v.voice_id == voice_id:
+        if key == voice_id or v.voice_id == voice_id or voice_id in v.name:
+            return v
+    # Fallback to direct Voice ID matching (e.g. if raw edge-tts ShortName is passed)
+    for v in VOICE_CATALOG.values():
+        if v.voice_id.lower() == voice_id.lower():
             return v
     return None
 
@@ -153,10 +294,6 @@ def rank_voices_for_script(
     style_preference: str = "Cinematic",
     user_preferred_voice: Optional[str] = None
 ) -> List[Dict[str, Any]]:
-    """
-    Ranks candidate voices based on language compatibility, style match,
-    QC history, and user preferences (Module 5 & 14).
-    """
     ranked = []
     lang_lower = language.lower()
     style_lower = style_preference.lower()
@@ -179,7 +316,7 @@ def rank_voices_for_script(
             score += 0.10
 
         # Style match
-        if style_lower in v.style.lower() or style_lower in v.description.lower():
+        if style_lower in v.style.lower() or style_lower in v.description.lower() or style_lower in v.name.lower():
             score += 0.15
             reasons.append(f"High {v.style} storytelling suitability")
 
@@ -189,7 +326,7 @@ def rank_voices_for_script(
         # User favorite bonus
         if user_preferred_voice and (user_preferred_voice == v.voice_id or user_preferred_voice in v.name):
             score += 0.05
-            reasons.append("User preference match")
+            reasons.append("User favorite voice")
 
         confidence = min(0.99, max(0.60, round(score, 2)))
         ranked.append({

@@ -135,9 +135,10 @@ class ScriptIntelligenceAgent:
         """
         lang_code, lang_desc = self.detect_language(text)
         
-        # Strip excessive newlines and markdown formatting
+        # Strip excessive markdown formatting while preserving line breaks for multi-speaker dialogues
         cleaned = re.sub(r'[*_#`~]', '', text)
-        cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+        lines = [re.sub(r'[ \t]+', ' ', line).strip() for line in cleaned.splitlines()]
+        cleaned = '\n'.join([line for line in lines if line])
 
         # Apply abbreviations
         cleaned = self.apply_abbreviations(cleaned)

@@ -1,5 +1,69 @@
 [
   {
+    "project_id": "AUDIT-E2E-1791211202",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 9.18,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T19:40:13.451498"
+  },
+  {
+    "project_id": "VX-5F2047",
+    "title": "0:00\u20130:20 \u2014 Hook\n1939. Europe stood on t...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 228.15,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T01:18:54.571236"
+  },
+  {
+    "project_id": "TEST-MULTI-VOICES",
+    "title": "Narrator: The old castle gates swung ope...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 11.35,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T01:14:13.098428"
+  },
+  {
+    "project_id": "TEST-MULTI-VOICES",
+    "title": "Narrator: The old castle gates swung ope...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 13.55,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T01:07:13.247753"
+  },
+  {
+    "project_id": "VX-FC8EF2",
+    "title": "azeem kyaa haaal hy aaap kaa kutti...",
+    "voice_id": "en-US-GuyNeural",
+    "duration": 3.34,
+    "qc_pass": true,
+    "timestamp": "2026-10-04T21:59:01.821254"
+  },
+  {
+    "project_id": "VX-3D3FC2",
+    "title": "In 1944 during WWII, the B-25 bomber van...",
+    "voice_id": "en-US-GuyNeural",
+    "duration": 12.46,
+    "qc_pass": true,
+    "timestamp": "2026-10-04T21:58:45.537778"
+  },
+  {
+    "project_id": "VX-AA3C7C",
+    "title": "In 1944 during WWII, the B-25 bomber van...",
+    "voice_id": "en-US-GuyNeural",
+    "duration": 12.46,
+    "qc_pass": true,
+    "timestamp": "2026-10-04T21:58:09.687648"
+  },
+  {
+    "project_id": "VX-E04500",
+    "title": "In 1944 during WWII, the B-25 bomber van...",
+    "voice_id": "en-US-GuyNeural",
+    "duration": 12.46,
+    "qc_pass": true,
+    "timestamp": "2026-10-04T21:57:58.553166"
+  },
+  {
     "project_id": "VX-8DA4D6",
     "title": "The storm grew intense. The lighthouse b...",
     "voice_id": "en-US-ChristopherNeural",

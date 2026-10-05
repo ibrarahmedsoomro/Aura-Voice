@@ -5,8 +5,13 @@
     "confidence": 1.0
   },
   "en-US-ChristopherNeural": {
-    "uses": 5,
-    "qc_successes": 5,
+    "uses": 9,
+    "qc_successes": 9,
+    "confidence": 1.0
+  },
+  "en-US-GuyNeural": {
+    "uses": 4,
+    "qc_successes": 4,
     "confidence": 1.0
   }
 }

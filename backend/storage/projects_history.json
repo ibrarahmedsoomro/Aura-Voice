@@ -1,0 +1,74 @@
+[
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 11.83,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T21:38:53.741989"
+  },
+  {
+    "project_id": "VX-ED190D",
+    "title": "# VANISHED SKIES\n\n### World War II \u2014 3-M...",
+    "voice_id": "en-US-AndrewMultilingualNeural",
+    "duration": 315.05,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:48:20.897968"
+  },
+  {
+    "project_id": "VX-DF53A3",
+    "title": "In 1944 during WWII, the B-25 bomber van...",
+    "voice_id": "en-US-AndrewMultilingualNeural",
+    "duration": 12.46,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:39:31.343451"
+  },
+  {
+    "project_id": "VX-00817D",
+    "title": "In 1944 during WWII, the B-25 bomber van...",
+    "voice_id": "en-US-AndrewMultilingualNeural",
+    "duration": 12.46,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:38:03.839773"
+  },
+  {
+    "project_id": "STEP19-1791214567",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 17.69,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:36:23.179388"
+  },
+  {
+    "project_id": "STEP19-1791214107",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 17.69,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:28:49.178719"
+  },
+  {
+    "project_id": "STEP19-1791212866",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 18.26,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:08:07.024068"
+  },
+  {
+    "project_id": "AUDIT-E2E-1791212550",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 9.28,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T20:02:40.026319"
+  },
+  {
+    "project_id": "AUDIT-E2E-1791211849",
+    "title": "Narrator: The old castle gates opened sl...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 9.18,
+    "qc_pass": true,
+    "timestamp": "2026-10-05T19:51:11.832672"
+  }
+]

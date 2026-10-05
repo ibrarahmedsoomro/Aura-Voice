@@ -2,7 +2,7 @@ import os
 import uuid
 import asyncio
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, Query, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect, Query, UploadFile, File, Form, Body
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
@@ -10,7 +10,8 @@ from ..models.schemas import (
     GenerateVoiceRequest,
     RedoChunkRequest,
     ProjectState,
-    VoiceProfile
+    VoiceProfile,
+    ProjectCharacter
 )
 from ..core.voice_catalog import (
     get_all_voices,
@@ -48,7 +49,7 @@ class SettingsRequest(BaseModel):
     enable_mastering: Optional[bool] = None
 
 # --- HEALTH CHECK ---
-@router.get("/health")
+@router.api_route("/health", methods=["GET", "HEAD"])
 def health_check():
     """System Health Check per Specification Section 34."""
     # Check FFmpeg
@@ -95,7 +96,7 @@ def get_voice(voice_id: str):
         raise HTTPException(status_code=404, detail="Voice not found")
     return v
 
-@router.post("/voices/{voice_id}/preview")
+@router.api_route("/voices/{voice_id}/preview", methods=["GET", "POST", "HEAD"])
 async def preview_voice(voice_id: str):
     """Synthesizes a short dynamic preview for the voice library."""
     v = find_voice_by_id_or_profile(voice_id)
@@ -152,6 +153,11 @@ def get_project(project_id: str):
     if not p:
         raise HTTPException(status_code=404, detail="Project not found")
     return p
+
+@router.delete("/projects/{project_id}")
+def delete_project(project_id: str):
+    db.delete_project(project_id)
+    return {"status": "deleted", "project_id": project_id}
 
 @router.get("/projects/{project_id}/status")
 def get_project_status(project_id: str):
@@ -222,8 +228,74 @@ def cancel_generation(project_id: str):
     orchestrator.cancel_project(project_id)
     return {"status": "cancelled", "project_id": project_id}
 
+# --- CHARACTER MANAGEMENT (Step 5, 7) ---
+class UpdateCharacterRequest(BaseModel):
+    voice_id: str
+    is_locked: Optional[bool] = None
+
+@router.get("/projects/{project_id}/characters")
+def get_project_characters(project_id: str):
+    p = db.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return p.get("characters", [])
+
+class ReplaceVoiceRequest(BaseModel):
+    voice_id: str
+
+@router.post("/projects/{project_id}/characters/{character_id}/replace-voice")
+async def replace_character_voiceover(project_id: str, character_id: str, req: ReplaceVoiceRequest):
+    """Replaces voice for a character across all their dialogue lines, re-synthesizes and remasters."""
+    p = db.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    try:
+        updated = await orchestrator.replace_character_voice(project_id, character_id, req.voice_id)
+        return updated
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/projects/{project_id}/replace-voice")
+async def replace_project_voiceover(project_id: str, req: ReplaceVoiceRequest):
+    """Replaces main voice for entire project/narration, re-synthesizes all lines, and remasters."""
+    p = db.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    try:
+        updated = await orchestrator.replace_project_voice(project_id, req.voice_id)
+        return updated
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/projects/{project_id}/characters/{character_id}")
+def update_project_character(project_id: str, character_id: str, req: UpdateCharacterRequest):
+    p = db.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    db.update_character_voice(project_id, character_id, req.voice_id, req.is_locked)
+    return db.get_project(project_id)
+
+@router.post("/projects/{project_id}/cast")
+def auto_cast_project_characters(project_id: str):
+    p = db.get_project(project_id)
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    norm_text, lang_code, _ = orchestrator.script_agent.normalize(p["raw_input"])
+    scenes, turns = orchestrator.speech_planner.extract_scenes_and_turns(norm_text)
+    unique_speakers = list(dict.fromkeys([t["speaker"] for t in turns if t.get("speaker")]))
+    existing_chars_data = db.get_project_characters(project_id)
+    existing_chars = [ProjectCharacter(**cd) for cd in existing_chars_data] if existing_chars_data else []
+    cast = orchestrator.speech_planner.auto_cast_characters(
+        speakers=unique_speakers,
+        language=p.get("language") or lang_code,
+        style_preference=p.get("style") or "Cinematic",
+        existing_characters=existing_chars
+    )
+    db.save_characters(project_id, [c.dict() for c in cast.values()])
+    return db.get_project(project_id)
+
 @router.post("/projects/{project_id}/chunks/{chunk_id}/redo")
-async def redo_chunk(project_id: str, chunk_id: int, req: Optional[RedoChunkRequest] = None):
+async def redo_chunk(project_id: str, chunk_id: int, req: Optional[RedoChunkRequest] = Body(None)):
     """Module 27: Line-by-Line Studio surgical chunk redo."""
     redo_req = req or RedoChunkRequest(project_id=project_id, chunk_index=chunk_id)
     redo_req.project_id = project_id
@@ -235,7 +307,7 @@ async def redo_chunk(project_id: str, chunk_id: int, req: Optional[RedoChunkRequ
         raise HTTPException(status_code=500, detail=str(e))
 
 # --- AUDIO & SUBTITLE STREAMING/DOWNLOAD ---
-@router.get("/projects/{project_id}/audio")
+@router.api_route("/projects/{project_id}/audio", methods=["GET", "HEAD"])
 def get_project_audio(project_id: str, format: str = "mp3"):
     """Secure audio streamer for master audio."""
     p = db.get_project(project_id)

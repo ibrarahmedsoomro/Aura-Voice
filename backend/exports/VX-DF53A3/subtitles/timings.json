@@ -1,0 +1,26 @@
+{
+  "total_duration_seconds": 12.456,
+  "chunks_count": 2,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "In nineteen forty-four during World War Two, the B twenty-five bomber vanished over the misty mountains.",
+      "spoken_normalized": "In nineteen forty-four during World War Two, the B twenty-five bomber vanished over the misty mountains.",
+      "start": 0.3,
+      "end": 7.308,
+      "duration": 7.008,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "Suddenly, the radio crackled with a mysterious signal.",
+      "spoken_normalized": "Suddenly, the radio crackled with a mysterious signal.",
+      "start": 8.208,
+      "end": 12.456,
+      "duration": 4.248,
+      "emotion": "suspense",
+      "speed": 0.92
+    }
+  ]
+}

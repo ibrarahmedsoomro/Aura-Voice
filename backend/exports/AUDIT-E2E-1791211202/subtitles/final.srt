@@ -1,0 +1,11 @@
+1
+00:00:00,300 --> 00:00:03,708
+The old castle gates opened slowly.
+
+2
+00:00:04,458 --> 00:00:06,785
+Everyone stay alert.
+
+3
+00:00:07,285 --> 00:00:09,734
+You should never have come here.

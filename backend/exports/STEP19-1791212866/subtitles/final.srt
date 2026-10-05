@@ -1,0 +1,27 @@
+1
+00:00:00,300 --> 00:00:03,708
+The old castle gates opened slowly.
+
+2
+00:00:04,458 --> 00:00:06,330
+Everyone stay alert.
+
+3
+00:00:06,830 --> 00:00:09,278
+You should never have come here.
+
+4
+00:00:09,778 --> 00:00:10,593
+Wait.
+
+5
+00:00:11,093 --> 00:00:13,374
+Those symbols are not decorative.
+
+6
+00:00:13,874 --> 00:00:15,746
+What do you mean?
+
+7
+00:00:16,245 --> 00:00:18,262
+They are a warning.

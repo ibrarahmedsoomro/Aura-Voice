@@ -1,0 +1,786 @@
+{
+  "total_duration_seconds": 315.054,
+  "chunks_count": 78,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "VANISHED SKIES",
+      "spoken_normalized": "VANISHED SKIES",
+      "start": 0.3,
+      "end": 2.172,
+      "duration": 1.872,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 2,
+      "text": "World War II \u2014 three-Minute Cinematic Voice-Over",
+      "spoken_normalized": "World War II \u2014 three-Minute Cinematic Voice-Over",
+      "start": 3.022,
+      "end": 6.982,
+      "duration": 3.96,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 3,
+      "text": "There was a time when the sky was no longer a symbol of freedom.",
+      "spoken_normalized": "There was a time when the sky was no longer a symbol of freedom.",
+      "start": 7.632,
+      "end": 11.16,
+      "duration": 3.528,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 4,
+      "text": "It became a battlefield.",
+      "spoken_normalized": "It became a battlefield.",
+      "start": 11.66,
+      "end": 13.532,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 5,
+      "text": "From nineteen thirty-nine to nineteen forty-five, the world was pulled into a war unlike anything humanity had ever witnessed.",
+      "spoken_normalized": "From nineteen thirty-nine to nineteen forty-five, the world was pulled into a war unlike anything humanity had ever witnessed.",
+      "start": 14.132,
+      "end": 22.94,
+      "duration": 8.808,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 6,
+      "text": "Nations mobilized millions of soldiers.",
+      "spoken_normalized": "Nations mobilized millions of soldiers.",
+      "start": 23.59,
+      "end": 26.83,
+      "duration": 3.24,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 7,
+      "text": "Cities became targets.",
+      "spoken_normalized": "Cities became targets.",
+      "start": 27.33,
+      "end": 29.226,
+      "duration": 1.896,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 8,
+      "text": "And above them all, thousands of aircraft filled the skies.",
+      "spoken_normalized": "And above them all, thousands of aircraft filled the skies.",
+      "start": 29.726,
+      "end": 33.83,
+      "duration": 4.104,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 9,
+      "text": "Bombers crossed oceans.",
+      "spoken_normalized": "Bombers crossed oceans.",
+      "start": 34.33,
+      "end": 36.61,
+      "duration": 2.28,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 10,
+      "text": "Fighters hunted them.",
+      "spoken_normalized": "Fighters hunted them.",
+      "start": 37.11,
+      "end": 38.982,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 11,
+      "text": "And every flight could become a one-way journey.",
+      "spoken_normalized": "And every flight could become a one-way journey.",
+      "start": 39.482,
+      "end": 42.77,
+      "duration": 3.288,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 12,
+      "text": "At the beginning of the war, aviation was still evolving rapidly.",
+      "spoken_normalized": "At the beginning of the war, aviation was still evolving rapidly.",
+      "start": 43.37,
+      "end": 48.098,
+      "duration": 4.728,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 13,
+      "text": "Wooden aircraft had given way to metal machines.",
+      "spoken_normalized": "Wooden aircraft had given way to metal machines.",
+      "start": 48.748,
+      "end": 51.94,
+      "duration": 3.192,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 14,
+      "text": "Engines became faster and more powerful.",
+      "spoken_normalized": "Engines became faster and more powerful.",
+      "start": 52.44,
+      "end": 55.44,
+      "duration": 3.0,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 15,
+      "text": "Radar transformed the way battles were fought.",
+      "spoken_normalized": "Radar transformed the way battles were fought.",
+      "start": 55.94,
+      "end": 59.468,
+      "duration": 3.528,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 16,
+      "text": "But technology came at a terrible price.",
+      "spoken_normalized": "But technology came at a terrible price.",
+      "start": 59.968,
+      "end": 62.92,
+      "duration": 2.952,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 17,
+      "text": "Over Britain, the sky became a deadly arena.",
+      "spoken_normalized": "Over Britain, the sky became a deadly arena.",
+      "start": 63.42,
+      "end": 66.9,
+      "duration": 3.48,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 18,
+      "text": "German bombers crossed the English Channel while British fighters rose to meet them.",
+      "spoken_normalized": "German bombers crossed the English Channel while British fighters rose to meet them.",
+      "start": 67.4,
+      "end": 72.152,
+      "duration": 4.752,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 19,
+      "text": "Pilots fought at incredible speeds, often seeing the enemy for only seconds before opening fire.",
+      "spoken_normalized": "Pilots fought at incredible speeds, often seeing the enemy for only seconds before opening fire.",
+      "start": 72.602,
+      "end": 79.586,
+      "duration": 6.984,
+      "emotion": "excited",
+      "speed": 1.08
+    },
+    {
+      "index": 20,
+      "text": "Below them, civilians watched the battles unfold above their homes.",
+      "spoken_normalized": "Below them, civilians watched the battles unfold above their homes.",
+      "start": 79.986,
+      "end": 84.81,
+      "duration": 4.824,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 21,
+      "text": "Searchlights cut through the darkness.",
+      "spoken_normalized": "Searchlights cut through the darkness.",
+      "start": 85.46,
+      "end": 88.004,
+      "duration": 2.544,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 22,
+      "text": "Anti-aircraft guns thundered from the ground.",
+      "spoken_normalized": "Anti-aircraft guns thundered from the ground.",
+      "start": 88.754,
+      "end": 91.658,
+      "duration": 2.904,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 23,
+      "text": "And sometimes, an aircraft simply disappeared.",
+      "spoken_normalized": "And sometimes, an aircraft simply disappeared.",
+      "start": 92.158,
+      "end": 96.022,
+      "duration": 3.864,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 24,
+      "text": "No warning.",
+      "spoken_normalized": "No warning.",
+      "start": 96.522,
+      "end": 98.394,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 25,
+      "text": "No survivors.",
+      "spoken_normalized": "No survivors.",
+      "start": 98.894,
+      "end": 100.766,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 26,
+      "text": "Only an empty patch of sky where a machine had been moments before.",
+      "spoken_normalized": "Only an empty patch of sky where a machine had been moments before.",
+      "start": 101.266,
+      "end": 105.418,
+      "duration": 4.152,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 27,
+      "text": "Then came the larger air campaigns.",
+      "spoken_normalized": "Then came the larger air campaigns.",
+      "start": 105.918,
+      "end": 108.438,
+      "duration": 2.52,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 28,
+      "text": "Across Europe, massive formations of Allied bombers flew deep into enemy territory.",
+      "spoken_normalized": "Across Europe, massive formations of Allied bombers flew deep into enemy territory.",
+      "start": 108.938,
+      "end": 115.202,
+      "duration": 6.264,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 29,
+      "text": "Hundreds of aircraft could fill the horizon, their engines roaring in formation.",
+      "spoken_normalized": "Hundreds of aircraft could fill the horizon, their engines roaring in formation.",
+      "start": 115.702,
+      "end": 121.342,
+      "duration": 5.64,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 30,
+      "text": "They carried thousands of kilograms of bombs.",
+      "spoken_normalized": "They carried thousands of kilograms of bombs.",
+      "start": 121.842,
+      "end": 124.818,
+      "duration": 2.976,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 31,
+      "text": "But they also carried something far more fragile\u2014",
+      "spoken_normalized": "But they also carried something far more fragile\u2014",
+      "start": 125.318,
+      "end": 128.606,
+      "duration": 3.288,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 32,
+      "text": "human lives.",
+      "spoken_normalized": "human lives.",
+      "start": 129.106,
+      "end": 130.978,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 33,
+      "text": "Inside every aircraft were young men who knew exactly how dangerous the mission was.",
+      "spoken_normalized": "Inside every aircraft were young men who knew exactly how dangerous the mission was.",
+      "start": 131.478,
+      "end": 136.95,
+      "duration": 5.472,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 34,
+      "text": "Some would return.",
+      "spoken_normalized": "Some would return.",
+      "start": 137.45,
+      "end": 139.322,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 35,
+      "text": "Some would never see home again.",
+      "spoken_normalized": "Some would never see home again.",
+      "start": 139.822,
+      "end": 141.598,
+      "duration": 1.776,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 36,
+      "text": "Fighters escorted the bombers, searching the sky for enemy aircraft.",
+      "spoken_normalized": "Fighters escorted the bombers, searching the sky for enemy aircraft.",
+      "start": 142.098,
+      "end": 147.33,
+      "duration": 5.232,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 37,
+      "text": "German interceptors attacked from above, below, and from the sides.",
+      "spoken_normalized": "German interceptors attacked from above, below, and from the sides.",
+      "start": 147.83,
+      "end": 152.366,
+      "duration": 4.536,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 38,
+      "text": "The formations broke apart.",
+      "spoken_normalized": "The formations broke apart.",
+      "start": 152.866,
+      "end": 154.834,
+      "duration": 1.968,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 39,
+      "text": "Gunfire flashed through the clouds.",
+      "spoken_normalized": "Gunfire flashed through the clouds.",
+      "start": 155.334,
+      "end": 157.758,
+      "duration": 2.424,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 40,
+      "text": "Aircraft fell burning toward the earth.",
+      "spoken_normalized": "Aircraft fell burning toward the earth.",
+      "start": 158.258,
+      "end": 161.162,
+      "duration": 2.904,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 41,
+      "text": "And thousands of stories ended in silence.",
+      "spoken_normalized": "And thousands of stories ended in silence.",
+      "start": 161.662,
+      "end": 164.878,
+      "duration": 3.216,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 42,
+      "text": "Yet the air war was not fought only over Europe.",
+      "spoken_normalized": "Yet the air war was not fought only over Europe.",
+      "start": 165.478,
+      "end": 168.862,
+      "duration": 3.384,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 43,
+      "text": "Across the Pacific, enormous distances separated opposing forces.",
+      "spoken_normalized": "Across the Pacific, enormous distances separated opposing forces.",
+      "start": 169.512,
+      "end": 174.888,
+      "duration": 5.376,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 44,
+      "text": "Aircraft launched from carriers crossed vast oceans, searching for enemy fleets.",
+      "spoken_normalized": "Aircraft launched from carriers crossed vast oceans, searching for enemy fleets.",
+      "start": 175.388,
+      "end": 181.412,
+      "duration": 6.024,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 45,
+      "text": "At Midway, in June nineteen forty-two, carrier aircraft helped change the direction of the Pacific War.",
+      "spoken_normalized": "At Midway, in June nineteen forty-two, carrier aircraft helped change the direction of the Pacific War.",
+      "start": 182.012,
+      "end": 189.404,
+      "duration": 7.392,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 46,
+      "text": "In the years that followed, island after island became another battlefield in the sky.",
+      "spoken_normalized": "In the years that followed, island after island became another battlefield in the sky.",
+      "start": 190.054,
+      "end": 195.406,
+      "duration": 5.352,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 47,
+      "text": "Pilots navigated through storms, darkness, smoke, and uncertainty.",
+      "spoken_normalized": "Pilots navigated through storms, darkness, smoke, and uncertainty.",
+      "start": 196.056,
+      "end": 202.488,
+      "duration": 6.432,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 48,
+      "text": "There was no guarantee they would ever find their target.",
+      "spoken_normalized": "There was no guarantee they would ever find their target.",
+      "start": 203.238,
+      "end": 206.502,
+      "duration": 3.264,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 49,
+      "text": "And no guarantee they would return.",
+      "spoken_normalized": "And no guarantee they would return.",
+      "start": 207.002,
+      "end": 209.21,
+      "duration": 2.208,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 50,
+      "text": "By nineteen forty-five, the skies over Europe had changed again.",
+      "spoken_normalized": "By nineteen forty-five, the skies over Europe had changed again.",
+      "start": 209.71,
+      "end": 213.814,
+      "duration": 4.104,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 51,
+      "text": "The Allied air forces had grown enormously.",
+      "spoken_normalized": "The Allied air forces had grown enormously.",
+      "start": 214.314,
+      "end": 217.362,
+      "duration": 3.048,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 52,
+      "text": "German aviation struggled under shortages of fuel, aircraft, and experienced pilots.",
+      "spoken_normalized": "German aviation struggled under shortages of fuel, aircraft, and experienced pilots.",
+      "start": 217.862,
+      "end": 224.342,
+      "duration": 6.48,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 53,
+      "text": "The war was approaching its final days.",
+      "spoken_normalized": "The war was approaching its final days.",
+      "start": 224.942,
+      "end": 227.558,
+      "duration": 2.616,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 54,
+      "text": "But victory did not erase the losses.",
+      "spoken_normalized": "But victory did not erase the losses.",
+      "start": 228.158,
+      "end": 230.894,
+      "duration": 2.736,
+      "emotion": "excited",
+      "speed": 1.08
+    },
+    {
+      "index": 55,
+      "text": "Thousands of aircraft had vanished.",
+      "spoken_normalized": "Thousands of aircraft had vanished.",
+      "start": 231.444,
+      "end": 234.036,
+      "duration": 2.592,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 56,
+      "text": "Hundreds of thousands of airmen had been killed, wounded, captured, or listed as missing.",
+      "spoken_normalized": "Hundreds of thousands of airmen had been killed, wounded, captured, or listed as missing.",
+      "start": 234.786,
+      "end": 240.522,
+      "duration": 5.736,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 57,
+      "text": "Some wreckage was recovered.",
+      "spoken_normalized": "Some wreckage was recovered.",
+      "start": 241.022,
+      "end": 242.894,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 58,
+      "text": "Much of it was never found.",
+      "spoken_normalized": "Much of it was never found.",
+      "start": 243.394,
+      "end": 245.266,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 59,
+      "text": "Decades passed.",
+      "spoken_normalized": "Decades passed.",
+      "start": 245.766,
+      "end": 247.638,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 60,
+      "text": "Forests grew over crash sites.",
+      "spoken_normalized": "Forests grew over crash sites.",
+      "start": 248.138,
+      "end": 250.706,
+      "duration": 2.568,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 61,
+      "text": "Oceans swallowed aircraft and buried them beneath the seabed.",
+      "spoken_normalized": "Oceans swallowed aircraft and buried them beneath the seabed.",
+      "start": 251.206,
+      "end": 255.43,
+      "duration": 4.224,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 62,
+      "text": "Names faded from memory.",
+      "spoken_normalized": "Names faded from memory.",
+      "start": 255.93,
+      "end": 257.802,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 63,
+      "text": "But the skies remember.",
+      "spoken_normalized": "But the skies remember.",
+      "start": 258.302,
+      "end": 260.174,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 64,
+      "text": "Every aircraft that disappeared carried a crew.",
+      "spoken_normalized": "Every aircraft that disappeared carried a crew.",
+      "start": 260.674,
+      "end": 263.938,
+      "duration": 3.264,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 65,
+      "text": "Every crew had a story.",
+      "spoken_normalized": "Every crew had a story.",
+      "start": 264.438,
+      "end": 266.55,
+      "duration": 2.112,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 66,
+      "text": "Every story had a home they hoped to return to.",
+      "spoken_normalized": "Every story had a home they hoped to return to.",
+      "start": 267.05,
+      "end": 270.146,
+      "duration": 3.096,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 67,
+      "text": "Today, when we look into an empty sky, it is easy to forget what once happened there.",
+      "spoken_normalized": "Today, when we look into an empty sky, it is easy to forget what once happened there.",
+      "start": 270.646,
+      "end": 276.502,
+      "duration": 5.856,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 68,
+      "text": "But beneath the clouds, beneath the waves, and beneath the earth\u2014",
+      "spoken_normalized": "But beneath the clouds, beneath the waves, and beneath the earth\u2014",
+      "start": 277.002,
+      "end": 281.034,
+      "duration": 4.032,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 69,
+      "text": "the remnants of that war still exist.",
+      "spoken_normalized": "the remnants of that war still exist.",
+      "start": 281.634,
+      "end": 284.442,
+      "duration": 2.808,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 70,
+      "text": "Twisted metal.",
+      "spoken_normalized": "Twisted metal.",
+      "start": 285.092,
+      "end": 286.964,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 71,
+      "text": "Faded insignias.",
+      "spoken_normalized": "Faded insignias.",
+      "start": 287.464,
+      "end": 289.336,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 72,
+      "text": "Fragments of engines.",
+      "spoken_normalized": "Fragments of engines.",
+      "start": 289.836,
+      "end": 291.708,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 73,
+      "text": "And sometimes, the final evidence of a life that vanished without a trace.",
+      "spoken_normalized": "And sometimes, the final evidence of a life that vanished without a trace.",
+      "start": 292.358,
+      "end": 299.054,
+      "duration": 6.696,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 74,
+      "text": "The war ended in nineteen forty-five.",
+      "spoken_normalized": "The war ended in nineteen forty-five.",
+      "start": 299.904,
+      "end": 302.544,
+      "duration": 2.64,
+      "emotion": "dramatic",
+      "speed": 0.95
+    },
+    {
+      "index": 75,
+      "text": "But for the missing\u2014",
+      "spoken_normalized": "But for the missing\u2014",
+      "start": 303.194,
+      "end": 305.066,
+      "duration": 1.872,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 76,
+      "text": "their journey never truly ended.",
+      "spoken_normalized": "their journey never truly ended.",
+      "start": 305.566,
+      "end": 308.158,
+      "duration": 2.592,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 77,
+      "text": "These are the stories of the aircraft that vanished...",
+      "spoken_normalized": "These are the stories of the aircraft that vanished...",
+      "start": 308.808,
+      "end": 312.024,
+      "duration": 3.216,
+      "emotion": "suspense",
+      "speed": 0.92
+    },
+    {
+      "index": 78,
+      "text": "and the skies that never forgot them.",
+      "spoken_normalized": "and the skies that never forgot them.",
+      "start": 312.774,
+      "end": 315.054,
+      "duration": 2.28,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

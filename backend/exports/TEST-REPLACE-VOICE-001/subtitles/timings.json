@@ -1,0 +1,46 @@
+{
+  "total_duration_seconds": 12.522,
+  "chunks_count": 4,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "The dark forest was eerily quiet.",
+      "spoken_normalized": "The dark forest was eerily quiet.",
+      "start": 0.15,
+      "end": 3.078,
+      "duration": 2.928,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 2,
+      "text": "Keep your flashlights pointed forward.",
+      "spoken_normalized": "Keep your flashlights pointed forward.",
+      "start": 3.578,
+      "end": 6.458,
+      "duration": 2.88,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 3,
+      "text": "Turn back before it is too late!",
+      "spoken_normalized": "Turn back before it is too late!",
+      "start": 6.958,
+      "end": 9.598,
+      "duration": 2.64,
+      "emotion": "narration",
+      "speed": 1.0
+    },
+    {
+      "index": 4,
+      "text": "Maintain your positions!",
+      "spoken_normalized": "Maintain your positions!",
+      "start": 10.098,
+      "end": 12.522,
+      "duration": 2.424,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}
