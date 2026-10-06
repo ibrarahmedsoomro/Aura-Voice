@@ -8,7 +8,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from app.orchestrator.central_orchestrator import CentralOrchestrator
 from app.models.schemas import GenerateVoiceRequest
 
-async def run_test():
+import pytest
+
+@pytest.mark.asyncio
+async def test_change_voiceover_flow():
     print("=== TEST: CHANGE VOICEOVER & CHARACTER REPLACEMENT ===")
     orchestrator = CentralOrchestrator()
 

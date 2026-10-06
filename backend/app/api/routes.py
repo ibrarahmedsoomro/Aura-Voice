@@ -127,13 +127,22 @@ async def create_project(req: CreateProjectRequest):
     """Creates a new project without executing it immediately."""
     proj_id = f"VX-{uuid.uuid4().hex[:6].upper()}"
     title = req.title or (req.text[:40].strip() + "...")
+    detected_lang, _ = orchestrator.script_agent.detect_language(req.text)
+    effective_lang = req.language_hint if (req.language_hint and req.language_hint != "auto") else detected_lang
+
+    effective_voice = req.voice_id
+    if effective_lang in ["ur", "roman_urdu"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
+        effective_voice = "ur-PK-AsadNeural"
+    elif effective_lang in ["sd", "roman_sindhi"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
+        effective_voice = "vox-sindhi-male"
+
     data = {
         "id": proj_id,
         "title": title,
         "raw_input": req.text,
         "input_type": req.input_type,
-        "language": req.language_hint,
-        "voice_id": req.voice_id,
+        "language": effective_lang,
+        "voice_id": effective_voice,
         "style": req.style_preference,
         "emotion": req.emotion_mode,
         "status": "CREATED",

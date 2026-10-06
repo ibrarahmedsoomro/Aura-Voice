@@ -1,12 +1,22 @@
 {
   "en-US-ChristopherNeural": {
-    "uses": 6,
-    "qc_successes": 6,
+    "uses": 20,
+    "qc_successes": 20,
     "confidence": 1.0
   },
   "en-US-AndrewMultilingualNeural": {
     "uses": 3,
     "qc_successes": 3,
+    "confidence": 1.0
+  },
+  "ur-PK-AsadNeural": {
+    "uses": 11,
+    "qc_successes": 10,
+    "confidence": 0.909
+  },
+  "ur-PK-UzmaNeural": {
+    "uses": 1,
+    "qc_successes": 1,
     "confidence": 1.0
   }
 }

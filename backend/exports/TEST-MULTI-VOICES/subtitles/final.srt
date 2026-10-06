@@ -7,9 +7,5 @@ The old castle gates swung open with a screech.
 Keep your shields raised!
 
 3
-00:00:06,645 --> 00:00:08,518
-You fools!
-
-4
-00:00:09,018 --> 00:00:11,346
-None shall leave alive.
+00:00:06,645 --> 00:00:10,678
+You fools! None shall leave alive.

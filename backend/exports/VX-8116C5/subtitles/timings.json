@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 2.766,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "kya haal hai bhai sab theek hai",
+      "spoken_normalized": "kya haal hai bhai sab theek hai",
+      "start": 0.15,
+      "end": 2.766,
+      "duration": 2.616,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

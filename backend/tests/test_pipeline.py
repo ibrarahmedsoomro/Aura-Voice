@@ -1,6 +1,7 @@
 import asyncio
 import os
 import sys
+import pytest
 
 # Ensure backend path is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -44,6 +45,7 @@ def test_voice_ranking():
     assert ranked[0]["voice"].language == "ur", "Expected Urdu voice top ranked for Urdu"
     print("[PASS] Test 5: Voice Intelligence Ranking passed.")
 
+@pytest.mark.asyncio
 async def test_end_to_end_generation_and_repair():
     o = CentralOrchestrator()
     db = DatabaseManager()

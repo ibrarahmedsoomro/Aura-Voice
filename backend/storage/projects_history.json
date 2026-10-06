@@ -1,5 +1,213 @@
 [
   {
+    "project_id": "VX-0581B0",
+    "title": "ada chha haal aahe saeen sab theek aahe...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 4.3,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:39:31.858803"
+  },
+  {
+    "project_id": "VX-645457",
+    "title": "hi kaise ho bhai kyaa haal hy kheriyat h...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 4.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:39:04.228344"
+  },
+  {
+    "project_id": "VX-3553CD",
+    "title": "The radar signal suddenly vanished. The...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 8.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:37:51.191955"
+  },
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 12.91,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:37:27.607111"
+  },
+  {
+    "project_id": "TEST-MULTI-VOICES",
+    "title": "Narrator: The old castle gates swung ope...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 10.68,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:37:10.327014"
+  },
+  {
+    "project_id": "VX-11E507",
+    "title": "The radar signal suddenly vanished. The...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 8.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:35:17.010537"
+  },
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 12.91,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:34:46.702419"
+  },
+  {
+    "project_id": "TEST-MULTI-VOICES",
+    "title": "Narrator: The old castle gates swung ope...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 10.63,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:34:32.514558"
+  },
+  {
+    "project_id": "VX-B55507",
+    "title": "aj me apko ek kahani sunaun ga to please...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 4.33,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:21:20.027925"
+  },
+  {
+    "project_id": "VX-840CA3",
+    "title": "hi kya hal hy...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 2.24,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T21:20:38.428441"
+  },
+  {
+    "project_id": "VX-A13ACE",
+    "title": "The radar signal suddenly vanished. The...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 8.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T15:10:01.674735"
+  },
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 12.91,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T15:09:44.922335"
+  },
+  {
+    "project_id": "VX-7ABB4F",
+    "title": "hi kaise ho kyaa haal hy kheriyat hy...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 2.21,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:39:14.362017"
+  },
+  {
+    "project_id": "VX-770244",
+    "title": "hi kaise ho kyaa haal hy kheriyat hy...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 4.01,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:38:40.589741"
+  },
+  {
+    "project_id": "VX-11ABEB",
+    "title": "agar urdu me jaise abhi typing kar raha...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 7.57,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:35:50.296768"
+  },
+  {
+    "project_id": "VX-D8D30C",
+    "title": "The radar signal suddenly vanished. The...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 8.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:35:10.796076"
+  },
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 11.83,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:34:53.288067"
+  },
+  {
+    "project_id": "TEST-MULTI-VOICES",
+    "title": "Narrator: The old castle gates swung ope...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 10.68,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:34:44.197274"
+  },
+  {
+    "project_id": "VX-F7111E",
+    "title": "agar urdu me jaise abhi typing kar raha...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 9.92,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:32:30.098109"
+  },
+  {
+    "project_id": "VX-9DBC51",
+    "title": "\u0633\u0646\u068c \u062c\u064a \u068c\u0631\u062a\u064a\u0621\u064e \u062c\u064a \u062e\u0648\u0634\u0628\u0648\u060c \u062f\u0646\u064a\u0627 \u06a9\u0627\u0646 \u0646\u0631\u0627\u0644\u064a \u0622...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 3.8,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:14:28.854405"
+  },
+  {
+    "project_id": "VX-58F7BF",
+    "title": "hi kaise ho kyaa ho raha hy...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 2.09,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:12:22.264299"
+  },
+  {
+    "project_id": "VX-A2BB71",
+    "title": "\u0633\u0646\u068c\u064a \u067b\u0648\u0644\u064a \u062a\u0645\u0627\u0645 \u0633\u067a\u064a \u06fd \u062e\u0648\u0628\u0635\u0648\u0631\u062a \u0622\u0647\u064a...",
+    "voice_id": "ur-PK-UzmaNeural",
+    "duration": 3.01,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:07:45.487438"
+  },
+  {
+    "project_id": "VX-9EBE1A",
+    "title": "chha haal aahe bhalo ahyan...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 0.15,
+    "qc_pass": false,
+    "timestamp": "2026-10-06T01:07:27.510871"
+  },
+  {
+    "project_id": "VX-8116C5",
+    "title": "kya haal hai bhai sab theek hai...",
+    "voice_id": "ur-PK-AsadNeural",
+    "duration": 2.77,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:07:04.724150"
+  },
+  {
+    "project_id": "VX-1854D7",
+    "title": "The radar signal suddenly vanished. The...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 8.4,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:02:55.236945"
+  },
+  {
+    "project_id": "TEST-REPLACE-VOICE-001",
+    "title": "Narrator: The dark forest was eerily qui...",
+    "voice_id": "en-US-ChristopherNeural",
+    "duration": 12.91,
+    "qc_pass": true,
+    "timestamp": "2026-10-06T01:02:39.201523"
+  },
+  {
     "project_id": "TEST-REPLACE-VOICE-001",
     "title": "Narrator: The dark forest was eerily qui...",
     "voice_id": "en-US-ChristopherNeural",

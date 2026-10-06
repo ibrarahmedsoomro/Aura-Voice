@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 2.214,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "hi kaise ho kyaa haal hy kheriyat hy",
+      "spoken_normalized": "hi kaise ho kyaa haal hy kheriyat hy",
+      "start": 0.15,
+      "end": 2.214,
+      "duration": 2.064,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

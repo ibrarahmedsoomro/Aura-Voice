@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 4.302,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "ada chha haal aahe saeen sab theek aahe tawahan kian ahyo",
+      "spoken_normalized": "ada chha haal aahe saeen sab theek aahe tawahan kian ahyo",
+      "start": 0.15,
+      "end": 4.302,
+      "duration": 4.152,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
-  "total_duration_seconds": 11.346,
-  "chunks_count": 4,
+  "total_duration_seconds": 10.678,
+  "chunks_count": 3,
   "timeline": [
     {
       "index": 1,
@@ -24,21 +24,11 @@
     },
     {
       "index": 3,
-      "text": "You fools!",
-      "spoken_normalized": "You fools!",
+      "text": "You fools! None shall leave alive.",
+      "spoken_normalized": "You fools! None shall leave alive.",
       "start": 6.646,
-      "end": 8.518,
-      "duration": 1.872,
-      "emotion": "narration",
-      "speed": 1.0
-    },
-    {
-      "index": 4,
-      "text": "None shall leave alive.",
-      "spoken_normalized": "None shall leave alive.",
-      "start": 9.018,
-      "end": 11.346,
-      "duration": 2.328,
+      "end": 10.678,
+      "duration": 4.032,
       "emotion": "narration",
       "speed": 1.0
     }

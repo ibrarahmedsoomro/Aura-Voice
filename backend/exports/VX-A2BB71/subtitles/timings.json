@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 3.006,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "\u0633\u0646\u068c\u064a \u067b\u0648\u0644\u064a \u062a\u0645\u0627\u0645 \u0633\u067a\u064a \u06fd \u062e\u0648\u0628\u0635\u0648\u0631\u062a \u0622\u0647\u064a",
+      "spoken_normalized": "\u0633\u0646\u068c\u064a \u067b\u0648\u0644\u064a \u062a\u0645\u0627\u0645 \u0633\u067a\u064a \u06fd \u062e\u0648\u0628\u0635\u0648\u0631\u062a \u0622\u0647\u064a",
+      "start": 0.15,
+      "end": 3.006,
+      "duration": 2.856,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

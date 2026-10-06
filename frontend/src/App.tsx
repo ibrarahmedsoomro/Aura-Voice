@@ -459,16 +459,24 @@ export default function App() {
     setProgressMsg("Analyzing your script...");
 
     try {
+      const effectiveLangHint = (languageHint === 'auto' || languageHint === 'en') && liveLang.code !== 'en'
+        ? liveLang.code 
+        : languageHint;
+      
+      const effectiveVoiceId = ((effectiveLangHint === 'roman_urdu' || effectiveLangHint === 'ur' || effectiveLangHint === 'roman_sindhi' || effectiveLangHint === 'sd') && (selectedVoice === 'auto' || selectedVoice.startsWith('en-')))
+        ? 'auto'
+        : selectedVoice;
+
       // 1. Create project first
       const createRes = await fetch('/api/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: scriptText,
-          voice_id: selectedVoice,
+          voice_id: effectiveVoiceId,
           style_preference: stylePreference,
           emotion_mode: emotionMode,
-          language_hint: languageHint
+          language_hint: effectiveLangHint
         })
       });
       if (!createRes.ok) throw new Error("Failed to initialize project.");
@@ -484,10 +492,10 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: scriptText,
-          voice_id: selectedVoice,
+          voice_id: effectiveVoiceId,
           style_preference: stylePreference,
           emotion_mode: emotionMode,
-          language_hint: languageHint,
+          language_hint: effectiveLangHint,
           enable_audio_mastering: enableMastering
         })
       });
@@ -588,7 +596,7 @@ export default function App() {
     const audioPath = chunk.audio_path || chunk.audio_file;
     if (!audioPath) return;
     if (chunkAudioRef.current) {
-      chunkAudioRef.current.src = `/api/audio/stream?path=${encodeURIComponent(audioPath)}`;
+      chunkAudioRef.current.src = `/api/audio/stream?path=${encodeURIComponent(audioPath)}&t=${Date.now()}`;
       chunkAudioRef.current.play();
       setPlayingChunkIdx(chunk.chunk_index);
       chunkAudioRef.current.onended = () => setPlayingChunkIdx(null);
@@ -683,6 +691,33 @@ export default function App() {
   const charCount = scriptText.length;
   // Estimated duration: ~150 words per minute = 2.5 words/sec
   const estimatedSeconds = Math.round(wordCount / 2.5);
+
+  const detectClientLanguage = (text: string, hint: string) => {
+    if (hint && hint !== 'auto') {
+      if (hint === 'roman_urdu') return { code: 'roman_urdu', label: 'Roman Urdu (اردو رومن)', voice: 'Aura Asad' };
+      if (hint === 'ur') return { code: 'ur', label: 'Urdu Script (اردو)', voice: 'Aura Asad / Uzma' };
+      if (hint === 'roman_sindhi') return { code: 'roman_sindhi', label: 'Roman Sindhi (سنڌي رومن)', voice: 'Aura Sarang (Sindhi)' };
+      if (hint === 'sd') return { code: 'sd', label: 'Sindhi Script (سنڌي)', voice: 'Aura Sarang / Marvi' };
+      if (hint === 'hi') return { code: 'hi', label: 'Hindi (हिंदी)', voice: 'Aura Madhur' };
+      return { code: 'en', label: 'English', voice: 'Aura Christopher' };
+    }
+    const clean = text.toLowerCase().trim();
+    if (/[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6]/.test(text) || /\b(سنڌ|سنڌي|آهي|توهان|منهنجو|ڇا|ڀلو|سائين)\b/.test(text)) {
+      return { code: 'sd', label: 'Sindhi Script (سنڌي)', voice: 'Aura Sarang / Marvi' };
+    }
+    if (/[\u0600-\u06FF]/.test(text)) {
+      return { code: 'ur', label: 'Urdu Script (اردو)', voice: 'Aura Asad / Uzma' };
+    }
+    if (/\b(chha|cha|aahe|ahe|ahyan|tawahan|tuhinjo|muhinjo|bhalo|asanjoo|sindh|sindhi|chawan|chayo|kandaseen|saeen)\b/.test(clean)) {
+      return { code: 'roman_sindhi', label: 'Roman Sindhi (سنڌي رومن)', voice: 'Aura Sarang (Sindhi)' };
+    }
+    if (/\b(hai|hy|hain|hyn|hoon|hun|kya|kia|kaise|kese|jaise|jese|aise|ese|bhai|theek|thik|aap|ap|apka|aapka|mera|meri|hum|nahi|nhi|lekin|lekn|magar|aur|shukriya|samajh|samjh|karna|karo|bhalay|wording|typing)\b/.test(clean)) {
+      return { code: 'roman_urdu', label: 'Roman Urdu (اردو رومن)', voice: 'Aura Asad (Urdu Deep)' };
+    }
+    return { code: 'en', label: 'English', voice: 'Aura Christopher' };
+  };
+
+  const liveLang = detectClientLanguage(scriptText, languageHint);
 
   const formatTime = (secs: number) => {
     if (isNaN(secs)) return "00:00";
@@ -958,13 +993,21 @@ export default function App() {
                 />
 
                 {/* Metrics & Upload Row */}
-                <div className="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-gray-100">
-                  <div className="flex items-center gap-3 font-mono">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-400 pt-2 border-t border-gray-100">
+                  <div className="flex flex-wrap items-center gap-2.5 font-mono">
                     <span>{wordCount} words</span>
                     <span>•</span>
                     <span>{charCount} characters</span>
                     <span>•</span>
                     <span>~{estimatedSeconds}s audio</span>
+                    {scriptText.trim().length > 0 && (
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-sans font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                        <Sparkles className="w-3 h-3 text-blue-500 animate-pulse" />
+                        <span>Language: <strong className="text-blue-900">{liveLang.label}</strong></span>
+                        <span className="text-blue-300">•</span>
+                        <span>Auto Voice: <strong className="text-blue-900">{liveLang.voice}</strong></span>
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -1049,7 +1092,10 @@ export default function App() {
                         <option value="auto">Auto Detect</option>
                         <option value="en">English</option>
                         <option value="ur">Urdu (اردو)</option>
-                        <option value="roman_urdu">Roman Urdu / Hinglish</option>
+                        <option value="roman_urdu">Roman Urdu (اردو رومن)</option>
+                        <option value="sd">Sindhi (سنڌي)</option>
+                        <option value="roman_sindhi">Roman Sindhi (سنڌي رومن)</option>
+                        <option value="hi">Hindi (हिंदी)</option>
                       </select>
                     </div>
 
@@ -1678,6 +1724,7 @@ export default function App() {
                       voice.name.toLowerCase().includes(voiceSearchQuery.toLowerCase()) ||
                       voice.description.toLowerCase().includes(voiceSearchQuery.toLowerCase()) ||
                       voice.locale.toLowerCase().includes(voiceSearchQuery.toLowerCase()) ||
+                      voice.language.toLowerCase().includes(voiceSearchQuery.toLowerCase()) ||
                       voice.style.toLowerCase().includes(voiceSearchQuery.toLowerCase());
                     
                     let matchG = true;

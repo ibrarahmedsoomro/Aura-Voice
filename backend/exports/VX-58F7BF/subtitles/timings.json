@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 2.094,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "hi kaise ho kyaa ho raha hy",
+      "spoken_normalized": "hi kaise ho kyaa ho raha hy",
+      "start": 0.15,
+      "end": 2.094,
+      "duration": 1.944,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

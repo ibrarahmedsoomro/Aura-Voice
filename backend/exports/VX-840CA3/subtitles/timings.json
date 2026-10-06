@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 2.238,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "hi kya hal hy",
+      "spoken_normalized": "hi kya hal hy",
+      "start": 0.15,
+      "end": 2.238,
+      "duration": 2.088,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

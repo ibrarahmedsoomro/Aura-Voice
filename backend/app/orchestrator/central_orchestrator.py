@@ -45,7 +45,7 @@ class CentralOrchestrator:
         self.script_agent = ScriptIntelligenceAgent()
         self.pronunciation_agent = PronunciationAgent()
         self.emotion_agent = EmotionPerformanceAgent()
-        self.speech_planner = SpeechPlannerAgent(self.emotion_agent, self.pronunciation_agent)
+        self.speech_planner = SpeechPlannerAgent(self.emotion_agent, self.pronunciation_agent, self.script_agent)
         self.audio_processor = AudioProcessorAgent()
         self.qc_agent = AutonomousQCAgent()
         self.repair_agent = AutonomousRepairAgent(self.tts_provider, self.audio_processor, self.qc_agent)
@@ -99,9 +99,14 @@ class CentralOrchestrator:
         if progress_callback:
             await progress_callback(state)
 
-        norm_text, lang_code, lang_desc = self.script_agent.normalize(request.text)
+        norm_text, detected_code, lang_desc = self.script_agent.normalize(request.text)
         if request.language_hint and request.language_hint != "auto":
-            lang_code = request.language_hint
+            if request.language_hint == "en" and detected_code in ["roman_urdu", "roman_sindhi", "ur", "sd"]:
+                lang_code = detected_code
+            else:
+                lang_code = request.language_hint
+        else:
+            lang_code = detected_code
         state.detected_language = lang_code
 
         # STEP 2: Voice Consent Gate & Casting Strategy
@@ -118,10 +123,13 @@ class CentralOrchestrator:
                 raise PermissionError(consent["reason"])
             target_voice = find_voice_by_id_or_profile(request.voice_id)
 
-        if not target_voice:
+        # Smart Language-Voice Alignment:
+        # If the script is Urdu, Roman Urdu, Sindhi, or Roman Sindhi, but target_voice is an English-only voice,
+        # redirect to the optimal native Urdu/Sindhi voice so it speaks with authentic native pronunciation.
+        if (not target_voice or (target_voice.language == "en" and lang_code in ["ur", "roman_urdu", "sd", "roman_sindhi"])):
             ranked = rank_voices_for_script(
                 language=lang_code,
-                style_preference=request.style_preference or "Cinematic",
+                style_preference=request.style_preference or (target_voice.style if target_voice else "Cinematic"),
                 user_preferred_voice=self.db.get_preference("preferred_voice_id")
             )
             target_voice = ranked[0]["voice"]

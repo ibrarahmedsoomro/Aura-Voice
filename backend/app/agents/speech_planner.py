@@ -3,6 +3,7 @@ from typing import List, Dict, Optional, Tuple, Any
 from ..models.schemas import ChunkPlan, ProjectCharacter, ScenePlan
 from .emotion_performance import EmotionPerformanceAgent
 from .pronunciation import PronunciationAgent
+from .script_intelligence import ScriptIntelligenceAgent
 from ..core.voice_catalog import VOICE_CATALOG, find_voice_by_id_or_profile
 
 class SpeechPlannerAgent:
@@ -14,9 +15,15 @@ class SpeechPlannerAgent:
     and performance direction.
     """
 
-    def __init__(self, emotion_agent: EmotionPerformanceAgent, pronunciation_agent: PronunciationAgent):
+    def __init__(
+        self,
+        emotion_agent: EmotionPerformanceAgent,
+        pronunciation_agent: PronunciationAgent,
+        script_agent: Optional[ScriptIntelligenceAgent] = None
+    ):
         self.emotion_agent = emotion_agent
         self.pronunciation_agent = pronunciation_agent
+        self.script_agent = script_agent or ScriptIntelligenceAgent()
 
         # Speaker archetype voice heuristics with confidence and human-readable reasons
         self.archetypes = {
@@ -168,7 +175,7 @@ class SpeechPlannerAgent:
                 continue
 
             # Check if line contains inline speaker changes
-            sub_turns = re.split(r'(?<=[.!?…])\s+(?=(?:\[[A-Za-z0-9_\s]+\]|[A-Za-z0-9_\s]{2,20})\s*:)', line)
+            sub_turns = re.split(r'(?<=[.!?…])\s+(?=(?:\[[A-Za-z0-9_\s\u0600-\u06FF]+\]|[A-Za-z0-9_\s\u0600-\u06FF]{2,20})\s*:)', line)
             for st in sub_turns:
                 st = st.strip()
                 if not st:
@@ -196,7 +203,7 @@ class SpeechPlannerAgent:
         line_clean = line.strip()
         
         # 1. Matches '[Speaker]: Text' or '[Speaker] Text'
-        match_bracket = re.match(r'^\[([A-Za-z0-9_\s]{2,25})\]\s*:?\s*(.+)$', line_clean)
+        match_bracket = re.match(r'^\[([A-Za-z0-9_\s\u0600-\u06FF]{2,25})\]\s*:?\s*(.+)$', line_clean)
         if match_bracket:
             spk = match_bracket.group(1).strip()
             text = match_bracket.group(2).strip()
@@ -204,7 +211,7 @@ class SpeechPlannerAgent:
             return (spk, text)
 
         # 2. Matches 'Speaker: Text'
-        match_colon = re.match(r'^([A-Za-z0-9_\s]{2,25})\s*:\s*(.+)$', line_clean)
+        match_colon = re.match(r'^([A-Za-z0-9_\s\u0600-\u06FF]{2,25})\s*:\s*(.+)$', line_clean)
         if match_colon:
             spk = match_colon.group(1).strip()
             text = match_colon.group(2).strip()
@@ -287,8 +294,25 @@ class SpeechPlannerAgent:
                 assigned_voice_ids.add(vid)
                 continue
 
-            # Language specific casting (Urdu/Hindi)
-            if "ur" in language.lower() or "roman" in language.lower():
+            # Language specific casting: Sindhi / Roman Sindhi
+            if any(term in language.lower() for term in ["sd", "sindhi"]):
+                is_f = any(k in spk_key for k in ["female", "aurat", "larki", "chhokri", "zal", "mother", "maa", "sister", "bhen", "adi", "marvi", "woman"]) or spk_key in female_names
+                vid = "ur-PK-UzmaNeural" if is_f else "ur-PK-AsadNeural"
+                cast[spk_key] = ProjectCharacter(
+                    character_id=spk_key,
+                    speaker_name=spk,
+                    voice_id=vid,
+                    provider="edge-tts",
+                    is_locked=spk_key in locked_set,
+                    style=style_preference,
+                    confidence=0.98,
+                    reason=f"Authentic Sindhi / Regional Indus voice profile for {spk}"
+                )
+                assigned_voice_ids.add(vid)
+                continue
+
+            # Language specific casting (Urdu / Roman Urdu)
+            if "ur" in language.lower() or "roman_urdu" in language.lower() or ("roman" in language.lower() and "sindhi" not in language.lower()):
                 is_f = any(k in spk_key for k in ["female", "aurat", "larki", "mother", "maa", "begum", "sister", "woman"]) or spk_key in female_names
                 vid = "ur-PK-UzmaNeural" if is_f else "ur-PK-AsadNeural"
                 cast[spk_key] = ProjectCharacter(
@@ -427,7 +451,19 @@ class SpeechPlannerAgent:
 
                 for clause in sub_clauses:
                     spoken_form = self.pronunciation_agent.apply_pronunciations(clause, custom_pronunciations)
+                    if language in ["roman_urdu", "ur", "roman_sindhi", "sd"]:
+                        spoken_form = self.script_agent.transliterate_to_spoken_script(spoken_form, language)
                     performance = self.emotion_agent.analyze_sentence_performance(clause, emotion_mode)
+
+                    # Ensure assigned voice can articulate the language properly
+                    actual_voice = assigned_voice
+                    if actual_voice.startswith("en-") and language in ["roman_urdu", "ur", "roman_sindhi", "sd"]:
+                        is_fem = (char_id and any(k in char_id for k in ["female", "aurat", "larki", "mother", "sister", "queen", "witch", "girl"]))
+                        actual_voice = "ur-PK-UzmaNeural" if is_fem else "ur-PK-AsadNeural"
+
+                    actual_rate = performance["rate"]
+                    if language in ["roman_urdu", "ur", "roman_sindhi", "sd"]:
+                        actual_rate = "-3%"
 
                     plan = ChunkPlan(
                         chunk_index=chunk_idx,
@@ -437,8 +473,8 @@ class SpeechPlannerAgent:
                         character_id=char_id or (spk.lower() if spk else None),
                         speaker_name=spk,
                         speaker=spk,
-                        voice_id=assigned_voice,
-                        assigned_voice_id=assigned_voice,
+                        voice_id=actual_voice,
+                        assigned_voice_id=actual_voice,
                         provider="edge-tts",
                         scene_id=scene_id,
                         emotion=performance["emotion"],
@@ -446,9 +482,9 @@ class SpeechPlannerAgent:
                         dramatic_intensity=performance.get("intensity", 0.5),
                         speed=performance["speed"],
                         pitch=performance["pitch"],
-                        rate=performance["rate"],
+                        rate=actual_rate,
                         pause_before_ms=performance["pause_before_ms"],
-                        pause_after_ms=performance["pause_after_ms"],
+                        pause_after_ms=performance["pause_after_ms"] if language not in ["roman_urdu", "ur", "roman_sindhi", "sd"] else max(performance["pause_after_ms"], 350),
                         stress_words=performance["stress_words"]
                     )
                     chunks.append(plan)

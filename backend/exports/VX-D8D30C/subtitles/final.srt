@@ -1,0 +1,7 @@
+1
+00:00:00,300 --> 00:00:03,251
+The radar signal suddenly vanished.
+
+2
+00:00:04,152 --> 00:00:07,992
+The commander ordered all units to stand by.

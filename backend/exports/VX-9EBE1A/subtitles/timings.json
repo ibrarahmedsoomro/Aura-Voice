@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 0.15,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "chha haal aahe bhalo ahyan",
+      "spoken_normalized": "chha haal aahe bhalo ahyan",
+      "start": 0.15,
+      "end": 0.15,
+      "duration": 0.0,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}

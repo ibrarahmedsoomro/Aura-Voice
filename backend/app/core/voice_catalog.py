@@ -219,6 +219,34 @@ VOICE_CATALOG: Dict[str, VoiceProfile] = {
         qc_rating=0.99
     ),
 
+    # --- SINDHI & REGIONAL INDUS CHARACTERS (سنڌي) ---
+    "vox-sindhi-male": VoiceProfile(
+        voice_id="ur-PK-AsadNeural",
+        name="Aura Sarang (Sindhi / Regional Lead)",
+        gender="Male",
+        language="sd",
+        locale="sd-PK",
+        style="Documentary",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Resonant, authentic voice tailored for Sindhi literature, historical epics, and Roman Sindhi narration.",
+        is_authorized=True,
+        qc_rating=0.99
+    ),
+    "vox-sindhi-female": VoiceProfile(
+        voice_id="ur-PK-UzmaNeural",
+        name="Aura Marvi (Sindhi / Regional Storyteller)",
+        gender="Female",
+        language="sd",
+        locale="sd-PK",
+        style="Storyteller",
+        provider="edge-tts",
+        license_type="LICENSED_PROVIDER",
+        description="Melodious, expressive voice with natural inflection for Sindhi folklore, Latif's poetry, and heartfelt dialogues.",
+        is_authorized=True,
+        qc_rating=0.99
+    ),
+
     # --- HINDI & HINGLISH CHARACTERS ---
     "vox-hindi-madhur": VoiceProfile(
         voice_id="hi-IN-MadhurNeural",
@@ -303,13 +331,19 @@ def rank_voices_for_script(
         reasons = []
 
         # Language match
-        if ("ur" in lang_lower or "roman" in lang_lower) and v.language == "ur":
+        if any(term in lang_lower for term in ["sd", "sindhi"]) and (v.language == "sd" or "sindhi" in v.name.lower() or "sindhi" in v.description.lower()):
+            score += 0.40
+            reasons.append("Native Sindhi / Regional Indus cadence")
+        elif any(term in lang_lower for term in ["sd", "sindhi"]) and v.language == "ur":
+            score += 0.30
+            reasons.append("South Asian regional phonetic alignment for Sindhi")
+        elif (lang_lower in ["ur", "roman_urdu"] or lang_lower.startswith("ur-") or "urdu" in lang_lower or (lang_lower == "roman")) and v.language == "ur":
             score += 0.35
             reasons.append("Native Urdu / Roman Urdu enunciation")
-        elif "hi" in lang_lower and v.language == "hi":
+        elif (lang_lower in ["hi", "hinglish"] or lang_lower.startswith("hi-") or "hindi" in lang_lower) and v.language == "hi":
             score += 0.35
             reasons.append("Native Hindi cadence")
-        elif v.language == "en" and "ur" not in lang_lower and "hi" not in lang_lower:
+        elif v.language == "en" and not any(term in lang_lower for term in ["ur", "urdu", "hi", "hindi", "sd", "sindhi", "roman"]):
             score += 0.30
             reasons.append("Native English clarity")
         elif v.language == "en":

@@ -1,0 +1,16 @@
+{
+  "total_duration_seconds": 9.918,
+  "chunks_count": 1,
+  "timeline": [
+    {
+      "index": 1,
+      "text": "agar urdu me jaise abhi typing kar raha hoon roman urdu hy wording bhalay hi english ki ho lekn language urdu aise hi agent nahi samjh raha hy still",
+      "spoken_normalized": "agar urdu me jaise abhi typing kar raha hoon roman urdu hy wording bhalay hi english ki ho lekn language urdu aise hi agent nahi samjh raha hy still",
+      "start": 0.15,
+      "end": 9.918,
+      "duration": 9.768,
+      "emotion": "narration",
+      "speed": 1.0
+    }
+  ]
+}
