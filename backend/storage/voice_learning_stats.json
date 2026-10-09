@@ -10,9 +10,9 @@
     "confidence": 1.0
   },
   "ur-PK-AsadNeural": {
-    "uses": 11,
-    "qc_successes": 10,
-    "confidence": 0.909
+    "uses": 16,
+    "qc_successes": 15,
+    "confidence": 0.938
   },
   "ur-PK-UzmaNeural": {
     "uses": 1,
