@@ -160,9 +160,11 @@ class CentralOrchestrator:
             default_voice_id=target_voice.voice_id
         )
 
-        # Save characters to SQLite
-        self.db.save_characters(project_id, [c.dict() for c in characters_map.values()])
-        state.characters = list(characters_map.values())
+        # Deduplicate characters by character_id
+        unique_chars_dict = {c.character_id: c for c in characters_map.values()}
+        unique_chars = list(unique_chars_dict.values())
+        self.db.save_characters(project_id, [c.dict() for c in unique_chars])
+        state.characters = unique_chars
 
         # STEP 4: Performance Planning & Prosody Direction (Step 8, 9, 10)
         state.progress_percentage = 40
@@ -184,16 +186,19 @@ class CentralOrchestrator:
         if progress_callback:
             await progress_callback(state)
 
-        # STEP 5: Chunk Speech Synthesis
+        # STEP 5: Chunk Speech Synthesis (Accelerated Parallel Concurrency)
         state.status = "SYNTHESIZING"
         total_chunks = len(chunks)
 
-        for i, chunk in enumerate(chunks):
+        concurrency = 8 if getattr(request, "expert_mode", True) else 4
+        semaphore = asyncio.Semaphore(concurrency)
+        completed_count = 0
+        progress_lock = asyncio.Lock()
+
+        async def synthesize_single_chunk(chunk: ChunkPlan):
+            nonlocal completed_count
             if project_id in self.cancelled_projects:
-                state.status = "CANCELLED"
-                state.current_step_description = "Generation cancelled"
-                self._sync_state_to_db(state)
-                return state
+                return
 
             chunk_filename = f"chunk_{chunk.chunk_index:03d}.mp3"
             chunk_file = os.path.join(paths["raw"], chunk_filename)
@@ -205,29 +210,45 @@ class CentralOrchestrator:
             chunk.voice_id = chunk_voice
             chunk.assigned_voice_id = chunk_voice
 
-            res = await self.tts_provider.synthesize_chunk(
-                text=chunk.spoken_text or chunk.normalized_text,
-                voice_id=chunk_voice,
-                rate=chunk.rate,
-                pitch=chunk.pitch,
-                output_path=chunk_file
-            )
+            async with semaphore:
+                if project_id in self.cancelled_projects:
+                    return
 
-            if res["success"]:
-                chunk.duration = self.audio_processor.get_audio_duration(chunk_file)
-            else:
-                chunk.duration = 0.0
-                chunk.qc_pass = False
-                chunk.qc_message = res.get("error")
+                res = await self.tts_provider.synthesize_chunk(
+                    text=chunk.spoken_text or chunk.normalized_text,
+                    voice_id=chunk_voice,
+                    rate=chunk.rate,
+                    pitch=chunk.pitch,
+                    output_path=chunk_file
+                )
 
-            # Persist chunk to database
-            self._save_chunk_to_db(project_id, chunk)
+                if res["success"]:
+                    chunk.duration = await asyncio.to_thread(self.audio_processor.get_audio_duration, chunk_file)
+                else:
+                    chunk.duration = 0.0
+                    chunk.qc_pass = False
+                    chunk.qc_message = res.get("error")
 
-            pct = 40 + int(((i + 1) / total_chunks) * 30)
-            state.progress_percentage = min(70, pct)
-            state.current_step_description = f"Generating voices... {i + 1} / {total_chunks} lines synthesized"
-            if progress_callback:
-                await progress_callback(state)
+                # Persist chunk to database
+                await asyncio.to_thread(self._save_chunk_to_db, project_id, chunk)
+
+                async with progress_lock:
+                    completed_count += 1
+                    pct = 40 + int((completed_count / total_chunks) * 30)
+                    state.progress_percentage = min(70, pct)
+                    state.current_step_description = f"⚡ Expert Voice Synthesis... {completed_count} / {total_chunks} lines synthesized"
+                    if progress_callback:
+                        await progress_callback(state)
+
+        # Run all chunk tasks in parallel
+        await asyncio.gather(*(synthesize_single_chunk(c) for c in chunks))
+
+        if project_id in self.cancelled_projects:
+            state.status = "CANCELLED"
+            state.current_step_description = "Generation cancelled"
+            self._sync_state_to_db(state)
+            return state
+
 
         # STEP 6: Autonomous Quality Control Check (Step 12)
         state.status = "QC_RUNNING"
@@ -310,18 +331,26 @@ class CentralOrchestrator:
         final_wav = os.path.join(paths["final"], "final.wav")
         final_mp3 = os.path.join(paths["final"], "final.mp3")
 
-        self.audio_processor.concatenate_chunks_with_pauses(valid_files, pauses, raw_master)
-
-        if os.path.exists(raw_master):
-            if request.enable_audio_mastering:
-                self.audio_processor.master_and_normalize_audio(raw_master, final_wav)
+        if not request.enable_audio_mastering:
+            success = await asyncio.to_thread(self.audio_processor.fast_assemble, valid_files, final_wav, final_mp3)
+            if success:
+                state.final_audio_wav = final_wav
+                state.final_audio_mp3 = final_mp3
             else:
-                import shutil
-                shutil.copy(raw_master, final_wav)
-            
-            self.audio_processor.convert_to_mp3(final_wav, final_mp3)
-            state.final_audio_wav = final_wav
-            state.final_audio_mp3 = final_mp3
+                await asyncio.to_thread(self.audio_processor.concatenate_chunks_with_pauses, valid_files, pauses, raw_master)
+                if os.path.exists(raw_master):
+                    import shutil
+                    shutil.copy(raw_master, final_wav)
+                    await asyncio.to_thread(self.audio_processor.convert_to_mp3, final_wav, final_mp3)
+                    state.final_audio_wav = final_wav
+                    state.final_audio_mp3 = final_mp3
+        else:
+            await asyncio.to_thread(self.audio_processor.concatenate_chunks_with_pauses, valid_files, pauses, raw_master)
+            if os.path.exists(raw_master):
+                await asyncio.to_thread(self.audio_processor.master_and_normalize_audio, raw_master, final_wav)
+                await asyncio.to_thread(self.audio_processor.convert_to_mp3, final_wav, final_mp3)
+                state.final_audio_wav = final_wav
+                state.final_audio_mp3 = final_mp3
 
         # STEP 10: Complete & Persist
         state.status = "COMPLETED"

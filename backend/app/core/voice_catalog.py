@@ -222,27 +222,27 @@ VOICE_CATALOG: Dict[str, VoiceProfile] = {
     # --- SINDHI & REGIONAL INDUS CHARACTERS (سنڌي) ---
     "vox-sindhi-male": VoiceProfile(
         voice_id="ur-PK-AsadNeural",
-        name="Aura Sarang (Sindhi / Regional Lead)",
+        name="Aura Sarang (سنڌي سارنگ - Sindhi Baritone)",
         gender="Male",
         language="sd",
         locale="sd-PK",
         style="Documentary",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Resonant, authentic voice tailored for Sindhi literature, historical epics, and Roman Sindhi narration.",
+        description="Deep, resonant, authentic voice with traditional Indus cadence for Sindhi literature, historical epics, and Roman Sindhi narration.",
         is_authorized=True,
         qc_rating=0.99
     ),
     "vox-sindhi-female": VoiceProfile(
         voice_id="ur-PK-UzmaNeural",
-        name="Aura Marvi (Sindhi / Regional Storyteller)",
+        name="Aura Marvi (سنڌي مارئي - Sindhi Storyteller)",
         gender="Female",
         language="sd",
         locale="sd-PK",
         style="Storyteller",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Melodious, expressive voice with natural inflection for Sindhi folklore, Latif's poetry, and heartfelt dialogues.",
+        description="Melodious, expressive voice with authentic lyrical Sindhi inflection for folklore, Shah jo Risalo, and warm dialogues.",
         is_authorized=True,
         qc_rating=0.99
     ),

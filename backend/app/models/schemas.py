@@ -149,7 +149,9 @@ class GenerateVoiceRequest(BaseModel):
     character_overrides: Optional[Dict[str, str]] = None # {"Commander": "en-US-BrianMultilingualNeural"}
     locked_characters: Optional[List[str]] = None
     enable_audio_mastering: bool = True
+    expert_mode: bool = True # Ultra-fast parallel neural synthesis, smart cache, and multi-core mastering
     background_sfx: Optional[str] = None # None, "rain_ambient", "cinematic_drone", "lofi_pad"
+
 
 class RedoChunkRequest(BaseModel):
     project_id: str

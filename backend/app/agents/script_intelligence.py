@@ -55,9 +55,9 @@ class ScriptIntelligenceAgent:
             # Check for Sindhi-specific characters:
             # ٻ (067B), ڀ (0680), ٿ (067F), ٺ (067E), ٽ (067D), ڄ (0684), ڃ (0689), ڇ (0686),
             # ڌ (0687), ڏ (068F), ڊ (068A), ڍ (068C), ڙ (0699), ڪ (06AA), ڳ (06B3), ڱ (06B1),
-            # ڻ (06BB), ڦ (06A6)
-            sindhi_chars_pattern = r'[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6]'
-            sindhi_words_pattern = r'\b(سنڌ|سنڌي|آهي|آهين|آهيان|توھان|توهان|منھنجو|منهنجو|ڇا|ٿيو|ڪري|ٻولايو|ڳالهه|ڀلو|ڏسو|ٿو|ٿي|ڪيو|ڪيان|اسان|سائين|ادا|ڀاءُ|چيو)\b'
+            # ڻ (06BB), ڦ (06A6), ۾ (06FD - Sindhi Postposition Meem)
+            sindhi_chars_pattern = r'[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6\u06FD]'
+            sindhi_words_pattern = r'\b(سنڌ|سنڌي|آهي|آهين|آهيان|آهيو|آهن|آهيون|توھان|توهان|منھنجو|منهنجو|منھنجي|منهنجي|تنھنجو|تنهنجو|تنھنجي|تنهنجي|پنھنجو|پنهنجو|پنھنجي|پنهنجي|ڇا|ٿيو|ٿئي|ٿو|ٿي|ٿا|ڪري|ڪريو|ڪيو|ڪيان|ٻولايو|ٻولي|ڳالهه|ڳالھ|ڀلو|ڏسو|ڏيو|ڏٺو|اسان|سائين|ادا|ادي|امڙ|ڀاءُ|چيو|چوان|ڪٿي|ڪڏهن|ڏاڍو|ڏاڍي|ڏاڍا|سٺو|سٺي|سٺا|مٺو|مٺي|مٺا|مون|مون کي|ناهي|ناهن|ناهيان|ناهيو|پيا|پيو|پئي)\b'
             
             if re.search(sindhi_chars_pattern, text_clean) or re.search(sindhi_words_pattern, text_clean):
                 return ("sd", "Sindhi (سنڌي Script)")
@@ -88,7 +88,13 @@ class ScriptIntelligenceAgent:
             "vanin", "vanyo", "vany", "achin", "achyo", "acho",
             "saeen", "sain", "pahanjo", "pahanji", "pahanja",
             "bhauro", "bhaura", "ada", "adi", "thye", "thyo", "pyo", "pyi",
-            "budho", "budhai", "wath", "wathyo", "ker", "chho"
+            "budho", "budhai", "wath", "wathyo", "ker", "chho",
+            "dadho", "dadhi", "dadha", "sutho", "suthi", "sutha",
+            "mitho", "mithi", "mitha", "amar", "ammar", "saan",
+            "moonkhe", "munkhe", "mookhe", "tawahankhe", "tawhankhe", "tuhankhe", "asankhe",
+            "naahi", "subhane", "sabhane", "mosam", "pyar", "salamat", "saath",
+            "boli", "watan", "ditha", "dithi", "budhi", "budha", "wano", "wanan",
+            "thindo", "thindi", "thinda", "saghe", "saghan", "sagho"
         }
 
         # High-confidence Roman Urdu markers (Zero collision with standard English words)
@@ -169,8 +175,19 @@ class ScriptIntelligenceAgent:
             "40": "forty", "50": "fifty", "60": "sixty", "70": "seventy",
             "80": "eighty", "90": "ninety", "100": "one hundred"
         }
-        for digit, word in num_map.items():
-            text = re.sub(rf'\b{digit}\b', word, text)
+        # Safely replace numbers while preserving Voice 1, Speaker 2, Scene 1, etc.
+        def _preserve_tags_num_sub(m):
+            prefix = m.group(1)
+            digit_str = m.group(2)
+            if prefix:
+                return m.group(0)  # Preserve tags like "Voice 1", "Speaker 2"
+            return num_map.get(digit_str, digit_str)
+
+        text = re.sub(
+            r'(?i)\b(voice\s+|speaker\s+|character\s+|scene\s+|turn\s+|part\s+|v)?(\d+)\b',
+            _preserve_tags_num_sub,
+            text
+        )
 
         return text
 
@@ -236,51 +253,184 @@ class ScriptIntelligenceAgent:
 
     def _convert_sindhi_script_to_acoustic(self, text: str) -> str:
         """
-        Acoustically adapts Sindhi Perso-Arabic unicode characters to Urdu phonemes
-        so Microsoft neural models (ur-PK-AsadNeural, ur-PK-UzmaNeural) pronounce every
-        Sindhi letter accurately without skipping or distorting characters.
+        High-fidelity acoustic adaptation of Sindhi Perso-Arabic unicode characters
+        to optimal Urdu neural phonemes for ur-PK-AsadNeural & ur-PK-UzmaNeural.
+        
+        Fixes prefix clobbering by matching longest words first with word boundaries,
+        normalizes both Doachashmee Heh (ھ U+06BE) and Goal Heh (ہ/ه), handles
+        Sindhi implosives (ٻ, ڄ, ڏ, ڳ), retroflexes (ٺ, ڻ, ڱ, ڇ), and gives natural vowel melody.
         """
-        acoustic_map = {
+        # 1. Whole-word replacements (sorted longest-first to prevent partial matches)
+        word_patterns = [
+            # Questions, greetings & state of being
+            (r'\b(?:ڪيئن|ڪئن|ڪيان|کيان)\b', 'کیاں'),
+            (r'\b(?:آهيون|آھيون)\b', 'آہیوں'),
+            (r'\b(?:آهيان|آھيان)\b', 'آہیاں'),
+            (r'\b(?:آهيو|آھيو)\b', 'آہِیو'),
+            (r'\b(?:آهين|آھين)\b', 'آہیں'),
+            (r'\b(?:آهي|آھي)\b', 'آہے'),
+            (r'\b(?:آهن|آھن)\b', 'آہَن'),
+            
+            # Pronouns & relationships
+            (r'\b(?:توهان\s*جو|توھان\s*جو)\b', 'توہاں جو'),
+            (r'\b(?:توهان\s*جي|توھان\s*جي)\b', 'توہاں جی'),
+            (r'\b(?:توهان\s*جا|توھان\s*جا)\b', 'توہاں جا'),
+            (r'\b(?:توهان\s*کي|توھان\s*کي)\b', 'توہاں کو'),
+            (r'\b(?:توهان|توھان|تَوهان)\b', 'توہاں'),
+            (r'\b(?:تنهنجو|تنھنجو|تھنجو|تُهنجو)\b', 'تُہِنجو'),
+            (r'\b(?:تنهنجي|تنھنجي|تھنجي|تُهنجي)\b', 'تُہِنجی'),
+            (r'\b(?:تنهنجا|تنھنجا|تھنجا|تُهنجا)\b', 'تُہِنجا'),
+            (r'\b(?:منهنجو|منھنجو)\b', 'مُہِنجو'),
+            (r'\b(?:منهنجي|منھنجي)\b', 'مُہِنجی'),
+            (r'\b(?:منهنجا|منھنجا)\b', 'مُہِنجا'),
+            (r'\b(?:اسان\s*جو|اساں\s*جو)\b', 'اساں جو'),
+            (r'\b(?:اسان\s*جي|اساں\s*جي)\b', 'اساں جی'),
+            (r'\b(?:اسان\s*جا|اساں\s*جا)\b', 'اساں جا'),
+            (r'\b(?:اسان|اساں)\b', 'اساں'),
+            (r'\b(?:پنهنجو|پنھنجو)\b', 'پَہِنجو'),
+            (r'\b(?:پنهنجي|پنھنجي)\b', 'پَہِنجی'),
+            (r'\b(?:پنهنجا|پنھنجا)\b', 'پَہِنجا'),
+            (r'\b(?:سائين|سائينءَ)\b', 'سائیں'),
+            (r'\b(?:ڀاءُ|ڀاء)\b', 'بھاءُ'),
+            (r'\b(?:ڀائر|ڀائرو)\b', 'بھائر'),
+            (r'\b(?:ڀيڻ|ڀيڻون)\b', 'بھین'),
+            (r'\b(?:مٺو|مِٺو)\b', 'مِٹھو'),
+            (r'\b(?:مٺا|مِٺا)\b', 'مِٹھا'),
+            (r'\b(?:مهرباني|مھرباني)\b', 'مہربانی'),
+            (r'\b(?:شڪريو|شُڪريو)\b', 'شکریو'),
+            (r'\b(?:خيريت|خَيريت)\b', 'خیریت'),
+            (r'\b(?:ٺيڪ|ٺِڪ)\b', 'ٹھیک'),
+            (r'\b(?:سڀني|سَڀني)\b', 'سبھنی'),
+            (r'\b(?:سڀئي|سَڀئي)\b', 'سبھئی'),
+            (r'\b(?:سڀ|سَڀ)\b', 'سبھ'),
+            (r'\b(?:سنڌي|سِنڌي)\b', 'سندھی'),
+            (r'\b(?:سنڌ|سِنڌ)\b', 'سندھ'),
+
+            # Aspects & Auxiliaries
+            (r'\b(?:ٿيو|ٿِيو)\b', 'تھیو'),
+            (r'\b(?:ٿي|ٿِي)\b', 'تھی'),
+            (r'\b(?:ٿو|ٿَو)\b', 'تھو'),
+            (r'\b(?:ٿا|ٿَا)\b', 'تھا'),
+            (r'\b(?:ٿئي|ٿِئي)\b', 'تھیئے'),
+            (r'\b(?:پيو|پِيو)\b', 'پِیو'),
+            (r'\b(?:پئي|پَئي)\b', 'پَئی'),
+            (r'\b(?:پيا|پِيا)\b', 'پِیا'),
+            (r'\b(?:ڪري|ڪَري)\b', 'کرے'),
+            (r'\b(?:ڪريو|ڪَريو)\b', 'کریو'),
+            (r'\b(?:ڪيو|ڪِيو)\b', 'کیو'),
+            (r'\b(?:ڪيان|ڪَيان)\b', 'کیاں'),
+            (r'\b(?:ڪنداسين|ڪَنداسين)\b', 'کنداسیں'),
+            (r'\b(?:ڪندو|ڪَندو)\b', 'کَندو'),
+            (r'\b(?:ڪندي|ڪَندي)\b', 'کَندی'),
+            (r'\b(?:ڪندا|ڪَندا)\b', 'کَندا'),
+
+            # Everyday verbs & vocabulary
+            (r'\b(?:ٻڌو|ٻُڌو)\b', 'بُدھو'),
+            (r'\b(?:ٻڌاءِ|ٻُڌاءِ)\b', 'بُدھائے'),
+            (r'\b(?:ٻڌايو|ٻُڌايو)\b', 'بُدھائیو'),
+            (r'\b(?:ڳالهه|ڳالھ)\b', 'گالھ'),
+            (r'\b(?:ڳالهايو|ڳالھایو)\b', 'گالھائیو'),
+            (r'\b(?:ڀلو|ڀَلو)\b', 'بھلو'),
+            (r'\b(?:ڀلا|ڀَلا)\b', 'بھلا'),
+            (r'\b(?:چنگو|چَنگو)\b', 'چنگو'),
+            (r'\b(?:چنگا|چَنگا)\b', 'چنگا'),
+            (r'\b(?:ڏسو|ڏِسو)\b', 'ڈسو'),
+            (r'\b(?:ڏيو|ڏِيو)\b', 'ڈیو'),
+            (r'\b(?:وٺو|وٺَو)\b', 'وتھو'),
+            (r'\b(?:وڃو|وڃَو)\b', 'وجو'),
+            (r'\b(?:اچو|اچَو)\b', 'اچو'),
+            (r'\b(?:چيو|چِيو)\b', 'چیو'),
+            (r'\b(?:چوان|چَوان)\b', 'چواں'),
+            (r'\b(?:ڪٿي|ڪِٿي|ڪٿان|ڪِٿان)\b', 'کتھے'),
+            (r'\b(?:ڪڏهن|ڪَڏھن)\b', 'کدھن'),
+            (r'\b(?:ڪير|ڪِير)\b', 'کیر'),
+            (r'\b(?:ڇو|ڇَو)\b', 'چھو'),
+            (r'\b(?:ڇا|ڇَا)\b', 'چھا')
+        ]
+        for pat, repl in word_patterns:
+            text = re.sub(pat, repl, text)
+
+        # 2. Character-level adaptation for remaining Sindhi letters
+        char_map = {
             'ڇ': 'چھ', 'ڪ': 'ک', 'ٺ': 'ٹھ', 'ٿ': 'تھ', 'ٻ': 'ب', 'ڀ': 'بھ',
             'ڄ': 'ج', 'ڃ': 'ن', 'ڌ': 'دھ', 'ڏ': 'ڈ', 'ڊ': 'ڈ', 'ڍ': 'ڈھ',
             'ڙ': 'ڑ', 'ڳ': 'گ', 'ڱ': 'نگ', 'ڻ': 'ن', 'ڦ': 'پھ',
-            'آهي': 'آہے', 'آهين': 'آہیں', 'آهيان': 'آہیاں', 'آهيو': 'آہیو',
-            'توهان': 'توہاں', 'منهنجو': 'مھنجو', 'منهنجي': 'مھنجی', 'منهنجا': 'مھنجا',
-            'اسان': 'اساں', 'اسانجو': 'اساں جو', 'اسانجي': 'اساں جی',
-            'سائين': 'سائیں', 'ي': 'ی', 'ك': 'ک', 'ه': 'ہ'
+            'ي': 'ی', 'ك': 'ک', 'ه': 'ہ'
         }
-        for k, v in acoustic_map.items():
+        for k, v in char_map.items():
             text = text.replace(k, v)
         return text
 
     def _transliterate_roman_sindhi(self, text: str) -> str:
         """
-        Maps Roman Sindhi words written in English letters directly into authentic
-        acoustic Nastaliq script for ur-PK-AsadNeural / ur-PK-UzmaNeural.
+        High-fidelity Roman Sindhi transliteration engine with comprehensive
+        vocabulary coverage (150+ core conversational & literary Sindhi words)
+        mapping to authentic acoustic Nastaliq script.
         """
         sindhi_map = {
-            'chha': 'چھا', 'cha': 'چھا', 'haal': 'حال', 'hal': 'حال',
-            'aahe': 'آہے', 'ahe': 'آہے', 'aahay': 'آہے',
-            'ahin': 'آہیں', 'aheen': 'آہیں', 'ahyan': 'آہیاں', 'ahyaan': 'آہیاں', 'ahyo': 'آہیو',
-            'tawahan': 'توہاں', 'tawhan': 'توہاں', 'tavhan': 'توہاں', 'twahan': 'توہاں',
-            'tuhanjo': 'تُھنجو', 'tuhinjo': 'تُھنجو', 'tuhanji': 'تُھنجی', 'tuhinji': 'تُھنجی',
-            'tuhanja': 'تُھنجا', 'tuhinja': 'تُھنجا',
-            'muhinjo': 'مُھنجو', 'munhinjo': 'مُھنجو', 'muhinji': 'مُھنجی', 'munhinji': 'مُھنجی',
-            'muhinja': 'مُھنجا', 'munhinja': 'مُھنجا',
-            'man': 'ماں', 'maan': 'ماں', 'asaa': 'اساں', 'asaan': 'اساں',
-            'asanjo': 'اساں جو', 'asanji': 'اساں جی', 'asanjoo': 'اساں جو',
-            'sindh': 'سندھ', 'sindhi': 'سندھی', 'bhalo': 'بھلو', 'bhala': 'بھلا',
-            'chango': 'چنگو', 'changa': 'چنگا', 'chawan': 'چون', 'chayo': 'چیو',
-            'khapay': 'کھپے', 'khapando': 'کھپندو', 'kayo': 'کیو', 'kandaseen': 'کنداسیں', 'karyo': 'کریو',
+            # Greetings, polite terms & family
+            'salam': 'سلام', 'salaam': 'سلام', 'assalam': 'السلام', 'alaikum': 'علیکم',
             'saeen': 'سائیں', 'sain': 'سائیں', 'ada': 'ادا', 'adi': 'ادی',
-            'watan': 'وطن', 'boli': 'بولی', 'thye': 'تھیے', 'thyo': 'تھیو',
-            'pyo': 'پیو', 'pyi': 'پیی', 'kithan': 'کتھاں', 'kithy': 'کتھے', 'kithe': 'کتھے',
-            'kadahn': 'کدھن', 'kadhin': 'کدھن', 'meherbani': 'مہربانی',
-            'shukrana': 'شکرانہ', 'theek': 'ٹھیک', 'thik': 'ٹھیک', 'thek': 'ٹھیک',
-            'sab': 'سبھ', 'sabh': 'سبھ', 'naalo': 'نالو', 'soomro': 'سومرو', 'shikarpur': 'شکارپور',
-            'kian': 'کیاں', 'keeyan': 'کیاں', 'ker': 'کیر', 'chho': 'چھو',
-            'budho': 'بدھو', 'budhai': 'بدھائے', 'wath': 'وتھ', 'wathyo': 'وتھیو',
-            'hath': 'ہتھ', 'akhiyun': 'اکھیوں', 'dil': 'دل', 'yaar': 'یار', 'bhai': 'بھائی'
+            'bhara': 'بھارا', 'bhai': 'بھائی', 'bhaura': 'بھائرو', 'bhauro': 'بھائرو',
+            'mitho': 'مِٹھو', 'mitha': 'مِٹھا', 'sohna': 'سوہݨا', 'sohno': 'سوہݨو',
+            'dost': 'دوست', 'sangat': 'سنگت', 'yaar': 'یار',
+            'meharbani': 'مہربانی', 'meherbani': 'مہربانی', 'shukrana': 'شکرانہ', 'shukriya': 'شکریہ',
+
+            # Questions & States
+            'chha': 'چھا', 'cha': 'چھا', 'haal': 'حال', 'hal': 'حال',
+            'chho': 'چھو', 'kian': 'کیاں', 'keeyan': 'کیاں', 'ker': 'کیر', 'keher': 'کیر',
+            'kithan': 'کتھاں', 'kithy': 'کتھے', 'kithe': 'کتھے',
+            'kadhin': 'کدھن', 'kadahn': 'کدھن',
+            'khush': 'خوش', 'theek': 'ٹھیک', 'thik': 'ٹھیک', 'thaak': 'ٹھاک', 'thak': 'ٹھاک',
+            'bhalo': 'بھلو', 'bhala': 'بھلا', 'chango': 'چنگو', 'changa': 'چنگا',
+            'mazey': 'مزے', 'maze': 'مزے', 'sab': 'سبھ', 'sabh': 'سبھ', 'sabhai': 'سبھئی', 'sabhni': 'سبھنی',
+            'khairiyat': 'خیریت', 'kheriat': 'خیریت',
+
+            # Auxiliary & To Be
+            'aahe': 'آہے', 'ahe': 'آہے', 'aahay': 'آہے',
+            'ahin': 'آہیں', 'aheen': 'آہیں',
+            'ahyan': 'آہیاں', 'ahyaan': 'آہیاں',
+            'ahyo': 'آہِیو', 'ahyao': 'آہِیو',
+            'aahiyoon': 'آہیوں', 'ahiyoon': 'آہیوں', 'aahiyon': 'آہیوں',
+            'aahan': 'آہَن', 'ahan': 'آہَن', 'hon': 'ہون',
+
+            # Pronouns
+            'tawahan': 'توہاں', 'tawhan': 'توہاں', 'tavhan': 'توہاں', 'twahan': 'توہاں',
+            'tuhanjo': 'تُہِنجو', 'tuhinjo': 'تُہِنجو', 'tuhanji': 'تُہِنجی', 'tuhinji': 'تُہِنجی',
+            'tuhanja': 'تُہِنجا', 'tuhinja': 'تُہِنجا',
+            'muhinjo': 'مُہِنجو', 'munhinjo': 'مُہِنجو', 'muhinji': 'مُہِنجی', 'munhinji': 'مُہِنجی',
+            'muhinja': 'مُہِنجا', 'munhinja': 'مُہِنجا',
+            'maan': 'ماں', 'man': 'ماں', 'aaoon': 'آؤں', 'aon': 'آؤں',
+            'asaa': 'اساں', 'asaan': 'اساں',
+            'asanjo': 'اساں جو', 'asanji': 'اساں جی', 'asanja': 'اساں جا', 'asanjoo': 'اساں جو',
+            'pahanjo': 'پَہِنجو', 'pahanji': 'پَہِنجی', 'pahanja': 'پَہِنجا',
+            'panhinjo': 'پَہِنجو', 'panhinji': 'پَہِنجی',
+            'hunanjo': 'ہُنن جو', 'hunanji': 'ہُنن جی', 'hunjo': 'ہُن جو', 'hunji': 'ہُن جی',
+            'hun': 'ہُن', 'huna': 'ہُن', 'huni': 'ہُن',
+
+            # Aspects & Verbs
+            'thyo': 'تھیو', 'thiyo': 'تھیو', 'thye': 'تھیئے', 'thiye': 'تھیئے',
+            'tho': 'تھو', 'thee': 'تھی', 'thi': 'تھی', 'thaa': 'تھا', 'tha': 'تھا',
+            'pyo': 'پِیو', 'piyo': 'پِیو', 'pyee': 'پَئی', 'payee': 'پَئی', 'pyaa': 'پِیا', 'piya': 'پِیا',
+            'chawan': 'چواں', 'chawaan': 'چواں', 'chayo': 'چیو', 'chaye': 'چئے',
+            'kare': 'کرے', 'karein': 'کریں', 'karyo': 'کریو', 'kario': 'کریو', 'karyan': 'کیاں',
+            'kandaseen': 'کنداسیں', 'kandasen': 'کنداسیں',
+            'kando': 'کَندو', 'kandi': 'کَندی', 'kanda': 'کَندا', 'kayo': 'کیو', 'kayi': 'کئی',
+            'budho': 'بُدھو', 'budhai': 'بُدھائے', 'budhayo': 'بُدھائیو',
+            'wath': 'وتھ', 'watho': 'وتھو', 'wathi': 'وتھی',
+            'wanyo': 'وجو', 'wanin': 'وجن', 'wanyi': 'وجی', 'wiyo': 'ویو', 'wayo': 'ویو',
+            'acho': 'اچو', 'achin': 'اچن', 'achi': 'اچی', 'aayo': 'آیو',
+            'diso': 'ڈسو', 'disin': 'ڈسن', 'disa': 'ڈساں',
+            'diyo': 'ڈیو', 'diyan': 'ڈیاں', 'de': 'ڈے',
+            'gaalh': 'گالھ', 'galh': 'گالھ', 'gaalhaayo': 'گالھائیو', 'galhayo': 'گالھائیو', 'gaalhyoon': 'گالھیوں',
+
+            # Regions, Culture & Geography
+            'sindh': 'سندھ', 'sindhi': 'سندھی', 'watan': 'وطن', 'boli': 'بولی',
+            'jiye': 'جیئے', 'jiyan': 'جیاں', 'dharti': 'دھرتی',
+            'latif': 'لطیف', 'bhitai': 'بھٹائی', 'shah': 'شاہ', 'risalo': 'رسالو',
+            'sarang': 'سارنگ', 'marvi': 'ماروی', 'soomro': 'سومرو', 'shikarpur': 'شکارپور',
+            'karachi': 'کراچی', 'hyderabad': 'حیدرآباد', 'sukkur': 'سکھر', 'larkana': 'لاڑکانہ',
+            'dil': 'دل', 'akhiyun': 'اکھیوں', 'hath': 'ہتھ', 'naalo': 'نالو', 'nalo': 'نالو'
         }
         return re.sub(r'[a-zA-Z]+', lambda m: sindhi_map.get(m.group(0).lower(), self._phonetic_fallback(m.group(0))), text)
 

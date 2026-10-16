@@ -150,6 +150,8 @@ export default function App() {
   const [languageHint, setLanguageHint] = useState<string>("auto");
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [enableMastering, setEnableMastering] = useState<boolean>(true);
+  const [expertMode, setExpertMode] = useState<boolean>(true); // Expert Mode ON by default for high-speed voice synthesis
+
 
   // Data from backend
   const [voices, setVoices] = useState<RankedVoice[]>([]);
@@ -496,7 +498,8 @@ export default function App() {
           style_preference: stylePreference,
           emotion_mode: emotionMode,
           language_hint: effectiveLangHint,
-          enable_audio_mastering: enableMastering
+          enable_audio_mastering: enableMastering,
+          expert_mode: expertMode
         })
       });
 
@@ -702,13 +705,13 @@ export default function App() {
       return { code: 'en', label: 'English', voice: 'Aura Christopher' };
     }
     const clean = text.toLowerCase().trim();
-    if (/[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6]/.test(text) || /\b(سنڌ|سنڌي|آهي|توهان|منهنجو|ڇا|ڀلو|سائين)\b/.test(text)) {
+    if (/[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6]/.test(text) || /\b(سنڌ|سنڌي|آهي|آھي|آهيو|آھيو|توهان|توھان|منهنجو|منھنجو|ڇا|ڀلو|سائين|ڪيئن|ادا|ادي)\b/.test(text)) {
       return { code: 'sd', label: 'Sindhi Script (سنڌي)', voice: 'Aura Sarang / Marvi' };
     }
     if (/[\u0600-\u06FF]/.test(text)) {
       return { code: 'ur', label: 'Urdu Script (اردو)', voice: 'Aura Asad / Uzma' };
     }
-    if (/\b(chha|cha|aahe|ahe|ahyan|tawahan|tuhinjo|muhinjo|bhalo|asanjoo|sindh|sindhi|chawan|chayo|kandaseen|saeen)\b/.test(clean)) {
+    if (/\b(chha|cha|aahe|ahe|ahyan|ahyo|kian|keeyan|tawahan|tawhan|tuhinjo|muhinjo|pahanjo|bhalo|bhala|asanjoo|sindh|sindhi|chawan|chayo|kandaseen|saeen|sain|ada|adi|mitho)\b/.test(clean)) {
       return { code: 'roman_sindhi', label: 'Roman Sindhi (سنڌي رومن)', voice: 'Aura Sarang (Sindhi)' };
     }
     if (/\b(hai|hy|hain|hyn|hoon|hun|kya|kia|kaise|kese|jaise|jese|aise|ese|bhai|theek|thik|aap|ap|apka|aapka|mera|meri|hum|nahi|nhi|lekin|lekn|magar|aur|shukriya|samajh|samjh|karna|karo|bhalay|wording|typing)\b/.test(clean)) {
@@ -1040,8 +1043,8 @@ export default function App() {
                         className="bg-transparent text-gray-800 text-xs outline-none cursor-pointer font-medium"
                       >
                         <option value="auto">Auto (Smart Match)</option>
-                        {voices.map(({ voice }) => (
-                          <option key={voice.voice_id} value={voice.voice_id}>
+                        {voices.map(({ voice }, idx) => (
+                          <option key={`${voice.voice_id}-${voice.name}-${idx}`} value={voice.voice_id}>
                             {voice.name} ({voice.style})
                           </option>
                         ))}
@@ -1099,6 +1102,26 @@ export default function App() {
                       </select>
                     </div>
 
+                    {/* Expert Turbo Mode Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setExpertMode(!expertMode)}
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                        expertMode
+                          ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 shadow-xs'
+                          : 'bg-gray-100 border-gray-200 text-gray-500 hover:bg-gray-200'
+                      }`}
+                      title="Expert Turbo Mode: 8x parallel concurrency, zero-latency chunk caching, and multi-core mastering"
+                    >
+                      <span className="text-amber-500 font-bold">⚡</span>
+                      <span>Expert Mode</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono uppercase font-bold ${
+                        expertMode ? 'bg-amber-500 text-white' : 'bg-gray-300 text-gray-700'
+                      }`}>
+                        {expertMode ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+
                     {/* Advanced toggle */}
                     <button
                       onClick={() => setShowAdvanced(!showAdvanced)}
@@ -1142,7 +1165,26 @@ export default function App() {
 
                 {/* ADVANCED SETTINGS (Collapsed by default) */}
                 {showAdvanced && (
-                  <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-gray-50/50 p-3 rounded-xl border">
+                  <div className="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-gray-50/50 p-3 rounded-xl border">
+                    <div>
+                      <h4 className="font-semibold text-gray-700 mb-1 flex items-center gap-1">
+                        <span>⚡ Expert Engine Mode</span>
+                        <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">8x TURBO</span>
+                      </h4>
+                      <label className="flex items-center gap-2 cursor-pointer text-gray-600">
+                        <input
+                          type="checkbox"
+                          checked={expertMode}
+                          onChange={(e) => setExpertMode(e.target.checked)}
+                          className="rounded accent-amber-500"
+                        />
+                        <span>Parallel Speech Synthesis & Instant Cache</span>
+                      </label>
+                      <p className="text-[11px] text-gray-400 mt-1">
+                        Synthesizes lines concurrently with 8 workers and instant disk caching.
+                      </p>
+                    </div>
+
                     <div>
                       <h4 className="font-semibold text-gray-700 mb-1">Audio Mastering</h4>
                       <label className="flex items-center gap-2 cursor-pointer text-gray-600">
@@ -1152,7 +1194,7 @@ export default function App() {
                           onChange={(e) => setEnableMastering(e.target.checked)}
                           className="rounded accent-blue-600"
                         />
-                        <span>EBU R128 Loudness Normalization (-14 LUFS target)</span>
+                        <span>EBU R128 Loudness Normalization (-14 LUFS)</span>
                       </label>
                       <p className="text-[11px] text-gray-400 mt-1">
                         High-pass 60Hz de-rumble & non-destructive speech compression.
@@ -1192,6 +1234,7 @@ export default function App() {
                 >
                   Roman Urdu Mystery
                 </button>
+
                 <button
                   onClick={() =>
                     setScriptText(
@@ -1470,8 +1513,8 @@ export default function App() {
                                     className="text-[11px] bg-white border border-gray-200 hover:border-purple-300 rounded-md px-2 py-1.5 text-gray-800 flex-1 cursor-pointer truncate font-medium transition-colors"
                                     title="Select new voice to trigger confirmation dialog"
                                   >
-                                    {voices.map(({ voice }) => (
-                                      <option key={voice.voice_id} value={voice.voice_id}>
+                                    {voices.map(({ voice }, idx) => (
+                                      <option key={`${voice.voice_id}-${voice.name}-${idx}`} value={voice.voice_id}>
                                         {voice.name} ({voice.style})
                                       </option>
                                     ))}
@@ -1579,8 +1622,8 @@ export default function App() {
                                 className="text-[11px] bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer max-w-[130px] truncate"
                                 title="Change voice for this line"
                               >
-                                {voices.map(({ voice }) => (
-                                  <option key={voice.voice_id} value={voice.voice_id}>
+                                {voices.map(({ voice }, idx) => (
+                                  <option key={`${voice.voice_id}-${voice.name}-${idx}`} value={voice.voice_id}>
                                     {voice.name}
                                   </option>
                                 ))}
@@ -1747,7 +1790,7 @@ export default function App() {
 
                     return (
                       <div
-                        key={voice.voice_id}
+                        key={`${voice.voice_id}-${voice.name}`}
                         className={`bg-white border rounded-xl p-4 space-y-3 transition-all ${
                           isSelected ? 'border-blue-500 ring-2 ring-blue-50' : 'border-gray-200 hover:border-gray-300'
                         }`}
@@ -2022,11 +2065,11 @@ export default function App() {
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-              {voices.map(({ voice }) => {
+              {voices.map(({ voice }, idx) => {
                 const isCur = (activeProject.voice_id || '') === voice.voice_id;
                 return (
                   <div
-                    key={voice.voice_id}
+                    key={`${voice.voice_id}-${voice.name}-${idx}`}
                     className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
                       isCur ? 'bg-purple-50/50 border-purple-200' : 'bg-gray-50/50 hover:bg-gray-50 border-gray-200'
                     }`}
