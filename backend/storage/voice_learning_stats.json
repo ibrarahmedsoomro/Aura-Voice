@@ -10,9 +10,9 @@
     "confidence": 1.0
   },
   "ur-PK-AsadNeural": {
-    "uses": 23,
-    "qc_successes": 22,
-    "confidence": 0.957
+    "uses": 24,
+    "qc_successes": 23,
+    "confidence": 0.958
   },
   "ur-PK-UzmaNeural": {
     "uses": 1,
@@ -23,5 +23,10 @@
     "uses": 6,
     "qc_successes": 5,
     "confidence": 0.833
+  },
+  "local-mms-snd": {
+    "uses": 5,
+    "qc_successes": 5,
+    "confidence": 1.0
   }
 }

@@ -98,7 +98,7 @@ def get_voice(voice_id: str):
 
 @router.api_route("/voices/{voice_id}/preview", methods=["GET", "POST", "HEAD"])
 async def preview_voice(voice_id: str):
-    """Synthesizes a short dynamic preview for the voice library."""
+    """Synthesizes a short dynamic preview for the voice library using authentic native scripts."""
     v = find_voice_by_id_or_profile(voice_id)
     if not v:
         raise HTTPException(status_code=404, detail="Voice not found")
@@ -107,17 +107,24 @@ async def preview_voice(voice_id: str):
     os.makedirs(preview_dir, exist_ok=True)
     out_file = os.path.join(preview_dir, f"{v.voice_id}_sample.mp3")
 
-    if not os.path.exists(out_file):
-        sample_text = (
-            "Hello, I am ready to bring your story to life with natural, expressive voice narration."
-            if v.language == "en" else
-            "Main aapki kahani ko pur-asar aur qudrati aawaz mein bayan karne ke liye tayyar hoon."
-        )
-        await orchestrator.tts_provider.synthesize_chunk(
+    if not os.path.exists(out_file) or os.path.getsize(out_file) < 100:
+        if v.language == "sd":
+            sample_text = "سنڌ سلامت ساٿ سلامت، علم ۽ ادب جي ترقي اسان جو مقصد آهي."
+        elif v.language == "hi":
+            sample_text = "नमस्ते, मैं आपकी कहानी को जीवंत और स्वाभाविक आवाज़ में प्रस्तुत करने के लिए तैयार हूँ।"
+        elif v.language == "ur":
+            sample_text = "میں آپ کی کہانی کو پُر اثر اور قدرتی آواز میں بیان کرنے کے لیے تیار ہوں۔"
+        else:
+            sample_text = "Hello, I am ready to bring your story to life with natural, expressive voice narration."
+
+        active_provider = orchestrator.provider_registry.get_provider_for_voice(v.voice_id)
+        res = await active_provider.synthesize_chunk(
             text=sample_text,
             voice_id=v.voice_id,
             output_path=out_file
         )
+        if not res.get("success"):
+            raise HTTPException(status_code=500, detail=res.get("error") or "Voice preview generation failed")
 
     return FileResponse(out_file, media_type="audio/mpeg")
 
@@ -131,10 +138,10 @@ async def create_project(req: CreateProjectRequest):
     effective_lang = req.language_hint if (req.language_hint and req.language_hint != "auto") else detected_lang
 
     effective_voice = req.voice_id
-    if effective_lang in ["ur", "roman_urdu"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
+    if effective_lang in ["ur", "roman_urdu", "sd", "roman_sindhi"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
         effective_voice = "ur-PK-AsadNeural"
-    elif effective_lang in ["sd", "roman_sindhi"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
-        effective_voice = "vox-sindhi-male"
+    elif effective_lang in ["hi", "hinglish"] and (not effective_voice or effective_voice == "auto" or effective_voice.startswith("en-")):
+        effective_voice = "hi-IN-MadhurNeural"
 
     data = {
         "id": proj_id,
@@ -373,10 +380,53 @@ def delete_pronunciation(word: str):
     return {"status": "deleted", "word": word}
 
 # --- SETTINGS & PREFERENCES ---
+class HFTokenRequest(BaseModel):
+    hf_token: str
+
+@router.get("/providers")
+def list_providers():
+    """Lists registered TTS providers, local model status, and offline readiness."""
+    return {
+        "providers": orchestrator.provider_registry.list_providers(),
+        "capabilities": orchestrator.provider_registry.get_language_capabilities()
+    }
+
+@router.get("/capabilities")
+def get_capabilities():
+    """Returns authentic language support matrix."""
+    return orchestrator.provider_registry.get_language_capabilities()
+
+@router.get("/settings/hf-token")
+def get_hf_token_status():
+    """Returns whether HF token is configured for local model downloads."""
+    token = orchestrator.provider_registry.local_provider.get_configured_token()
+    if token:
+        masked = token[:4] + "..." + token[-4:] if len(token) > 8 else "***"
+        return {"configured": True, "token_preview": masked}
+    return {"configured": False, "token_preview": None}
+
+@router.post("/settings/hf-token")
+def save_hf_token(req: HFTokenRequest):
+    """Saves HF_TOKEN to storage/settings.json for seamless local VITS downloads."""
+    import json
+    settings_path = orchestrator.provider_registry.local_provider.settings_file
+    os.makedirs(os.path.dirname(settings_path), exist_ok=True)
+    existing = {}
+    if os.path.exists(settings_path):
+        try:
+            with open(settings_path, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+        except Exception:
+            pass
+    existing["hf_token"] = req.hf_token.strip()
+    with open(settings_path, "w", encoding="utf-8") as f:
+        json.dump(existing, f, indent=2)
+    return {"status": "saved", "configured": True}
+
 @router.get("/settings")
 def get_settings():
     return {
-        "preferred_voice_id": db.get_preference("preferred_voice_id", "vox-cinematic-male"),
+        "preferred_voice_id": db.get_preference("preferred_voice_id", "local-mms-snd"),
         "preferred_style": db.get_preference("preferred_style", "Cinematic"),
         "default_emotion": db.get_preference("default_emotion", "auto"),
         "enable_mastering": db.get_preference("enable_mastering", True)

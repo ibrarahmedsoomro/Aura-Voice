@@ -29,7 +29,9 @@ import {
   Unlock,
   Search,
   RefreshCw,
-  CheckCircle2
+  CheckCircle2,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 interface VoiceProfile {
@@ -42,6 +44,7 @@ interface VoiceProfile {
   provider: string;
   description: string;
   qc_rating: number;
+  is_local?: boolean;
 }
 
 interface RankedVoice {
@@ -266,6 +269,68 @@ export default function App() {
     }
   };
 
+  // History Multi-Select & Bulk Delete State
+  const [isHistorySelectMode, setIsHistorySelectMode] = useState<boolean>(false);
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
+  const [isDeletingHistory, setIsDeletingHistory] = useState<boolean>(false);
+
+  const toggleSelectProject = (projectId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSelectedProjectIds(prev =>
+      prev.includes(projectId) ? prev.filter(id => id !== projectId) : [...prev, projectId]
+    );
+  };
+
+  const handleSelectAllProjects = () => {
+    if (selectedProjectIds.length === projectsHistory.length) {
+      setSelectedProjectIds([]);
+    } else {
+      setSelectedProjectIds(projectsHistory.map(p => p.id));
+    }
+  };
+
+  const handleDeleteSelectedProjects = async () => {
+    if (selectedProjectIds.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedProjectIds.length} selected project(s)?`)) return;
+    setIsDeletingHistory(true);
+    try {
+      await Promise.all(
+        selectedProjectIds.map(id => fetch(`/api/projects/${id}`, { method: 'DELETE' }))
+      );
+      if (activeProject && selectedProjectIds.includes(activeProject.id)) {
+        setActiveProject(null);
+        setScriptText("");
+      }
+      setSelectedProjectIds([]);
+      setIsHistorySelectMode(false);
+      await loadProjects();
+    } catch (err) {
+      console.error("Bulk delete error:", err);
+    } finally {
+      setIsDeletingHistory(false);
+    }
+  };
+
+  const handleClearAllHistory = async () => {
+    if (projectsHistory.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ALL ${projectsHistory.length} past projects? This cannot be undone.`)) return;
+    setIsDeletingHistory(true);
+    try {
+      await Promise.all(
+        projectsHistory.map(p => fetch(`/api/projects/${p.id}`, { method: 'DELETE' }))
+      );
+      setActiveProject(null);
+      setScriptText("");
+      setSelectedProjectIds([]);
+      setIsHistorySelectMode(false);
+      await loadProjects();
+    } catch (err) {
+      console.error("Clear all history error:", err);
+    } finally {
+      setIsDeletingHistory(false);
+    }
+  };
+
   // Voice replacement state & confirmation modal
   const [voiceChangeModal, setVoiceChangeModal] = useState<VoiceChangeTarget | null>(null);
   const [isReplacingVoice, setIsReplacingVoice] = useState<boolean>(false);
@@ -485,41 +550,68 @@ export default function App() {
       const proj: ProjectRecord = await createRes.json();
       setActiveProject(proj);
 
-      // 2. Trigger generation
+      // 2. Trigger generation with live progress updates
       setProgressPct(25);
       setProgressMsg("Planning narration & breath pacing ✓");
 
-      const genRes = await fetch(`/api/projects/${proj.id}/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: scriptText,
-          voice_id: effectiveVoiceId,
-          style_preference: stylePreference,
-          emotion_mode: emotionMode,
-          language_hint: effectiveLangHint,
-          enable_audio_mastering: enableMastering,
-          expert_mode: expertMode
-        })
-      });
+      let ws: WebSocket | null = null;
+      try {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        ws = new WebSocket(`${protocol}//${window.location.host}/ws/projects/${proj.id}`);
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'progress' && data.percentage) {
+              setProgressPct(data.percentage);
+              if (data.description) setProgressMsg(data.description);
+            }
+          } catch (e) {}
+        };
+      } catch (e) {}
 
-      if (!genRes.ok) {
-        const errText = await genRes.text();
-        throw new Error(errText);
-      }
+      const progressTimer = setInterval(() => {
+        setProgressPct(prev => (prev < 85 ? prev + 8 : prev));
+      }, 800);
 
-      const completedProject: ProjectRecord = await genRes.json();
-      setActiveProject(completedProject);
-      setIsGenerating(false);
-      setProgressPct(100);
-      setProgressMsg("Ready ✓");
-      trackVoiceUsage(selectedVoice);
-      loadProjects();
+      try {
+        const genRes = await fetch(`/api/projects/${proj.id}/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: scriptText,
+            voice_id: effectiveVoiceId,
+            style_preference: stylePreference,
+            emotion_mode: emotionMode,
+            language_hint: effectiveLangHint,
+            enable_audio_mastering: enableMastering,
+            expert_mode: expertMode
+          })
+        });
 
-      // Autoload audio
-      if (audioRef.current && completedProject.id) {
-        audioRef.current.src = `/api/projects/${completedProject.id}/audio?format=mp3&t=${Date.now()}`;
-        audioRef.current.load();
+        clearInterval(progressTimer);
+        if (ws) ws.close();
+
+        if (!genRes.ok) {
+          const errText = await genRes.text();
+          throw new Error(errText);
+        }
+
+        const completedProject: ProjectRecord = await genRes.json();
+        setActiveProject(completedProject);
+        setIsGenerating(false);
+        setProgressPct(100);
+        setProgressMsg("Ready ✓");
+        trackVoiceUsage(selectedVoice);
+        loadProjects();
+
+        // Autoload audio
+        if (audioRef.current && completedProject.id) {
+          audioRef.current.src = `/api/projects/${completedProject.id}/audio?format=mp3&t=${Date.now()}`;
+          audioRef.current.load();
+        }
+      } finally {
+        clearInterval(progressTimer);
+        if (ws) ws.close();
       }
     } catch (err: any) {
       setErrorMessage(err.message || "We couldn't generate this voice. Please try again.");
@@ -699,20 +791,12 @@ export default function App() {
     if (hint && hint !== 'auto') {
       if (hint === 'roman_urdu') return { code: 'roman_urdu', label: 'Roman Urdu (اردو رومن)', voice: 'Aura Asad' };
       if (hint === 'ur') return { code: 'ur', label: 'Urdu Script (اردو)', voice: 'Aura Asad / Uzma' };
-      if (hint === 'roman_sindhi') return { code: 'roman_sindhi', label: 'Roman Sindhi (سنڌي رومن)', voice: 'Aura Sarang (Sindhi)' };
-      if (hint === 'sd') return { code: 'sd', label: 'Sindhi Script (سنڌي)', voice: 'Aura Sarang / Marvi' };
       if (hint === 'hi') return { code: 'hi', label: 'Hindi (हिंदी)', voice: 'Aura Madhur' };
       return { code: 'en', label: 'English', voice: 'Aura Christopher' };
     }
     const clean = text.toLowerCase().trim();
-    if (/[\u067B\u0680\u067F\u067E\u067D\u0684\u0689\u0686\u0687\u068F\u068A\u068C\u0699\u06AA\u06B3\u06B1\u06BB\u06A6]/.test(text) || /\b(سنڌ|سنڌي|آهي|آھي|آهيو|آھيو|توهان|توھان|منهنجو|منھنجو|ڇا|ڀلو|سائين|ڪيئن|ادا|ادي)\b/.test(text)) {
-      return { code: 'sd', label: 'Sindhi Script (سنڌي)', voice: 'Aura Sarang / Marvi' };
-    }
     if (/[\u0600-\u06FF]/.test(text)) {
       return { code: 'ur', label: 'Urdu Script (اردو)', voice: 'Aura Asad / Uzma' };
-    }
-    if (/\b(chha|cha|aahe|ahe|ahyan|ahyo|kian|keeyan|tawahan|tawhan|tuhinjo|muhinjo|pahanjo|bhalo|bhala|asanjoo|sindh|sindhi|chawan|chayo|kandaseen|saeen|sain|ada|adi|mitho)\b/.test(clean)) {
-      return { code: 'roman_sindhi', label: 'Roman Sindhi (سنڌي رومن)', voice: 'Aura Sarang (Sindhi)' };
     }
     if (/\b(hai|hy|hain|hyn|hoon|hun|kya|kia|kaise|kese|jaise|jese|aise|ese|bhai|theek|thik|aap|ap|apka|aapka|mera|meri|hum|nahi|nhi|lekin|lekn|magar|aur|shukriya|samajh|samjh|karna|karo|bhalay|wording|typing)\b/.test(clean)) {
       return { code: 'roman_urdu', label: 'Roman Urdu (اردو رومن)', voice: 'Aura Asad (Urdu Deep)' };
@@ -816,43 +900,125 @@ export default function App() {
           {/* Recent Projects List */}
           <div className="mt-4 px-3 flex-1 overflow-y-auto">
             <div className="flex items-center justify-between px-2 mb-1.5">
-              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                Recent Projects
-              </p>
-              <span className="text-[10px] text-gray-400 font-mono">
-                {projectsHistory.length}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Recent Projects
+                </p>
+                <span className="text-[10px] text-gray-400 font-mono">
+                  ({projectsHistory.length})
+                </span>
+              </div>
+              {projectsHistory.length > 0 && (
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      setIsHistorySelectMode(!isHistorySelectMode);
+                      if (isHistorySelectMode) setSelectedProjectIds([]);
+                    }}
+                    className={`text-[10px] px-1.5 py-0.5 rounded font-medium transition-all ${
+                      isHistorySelectMode
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-200'
+                    }`}
+                    title={isHistorySelectMode ? "Cancel selection" : "Select multiple projects to delete"}
+                  >
+                    {isHistorySelectMode ? 'Cancel' : 'Select'}
+                  </button>
+                  {!isHistorySelectMode && (
+                    <button
+                      onClick={handleClearAllHistory}
+                      className="text-[10px] text-gray-400 hover:text-red-600 p-0.5 rounded transition-all"
+                      title="Delete all history"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
+
+            {/* Selection Action Bar */}
+            {isHistorySelectMode && projectsHistory.length > 0 && (
+              <div className="mb-2 p-1.5 bg-blue-50/70 border border-blue-200 rounded-lg flex items-center justify-between text-[11px]">
+                <button
+                  onClick={handleSelectAllProjects}
+                  className="text-blue-700 hover:text-blue-900 font-medium px-1 flex items-center gap-1"
+                >
+                  {selectedProjectIds.length === projectsHistory.length ? (
+                    <>
+                      <CheckSquare className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Deselect</span>
+                    </>
+                  ) : (
+                    <>
+                      <Square className="w-3.5 h-3.5 text-blue-500" />
+                      <span>All ({projectsHistory.length})</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  disabled={selectedProjectIds.length === 0 || isDeletingHistory}
+                  onClick={handleDeleteSelectedProjects}
+                  className="flex items-center gap-1 bg-red-600 hover:bg-red-700 disabled:opacity-40 text-white font-medium px-2 py-0.5 rounded text-[10px] transition-all"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Delete ({selectedProjectIds.length})</span>
+                </button>
+              </div>
+            )}
+
             <div className="space-y-1">
               {projectsHistory.length === 0 ? (
                 <p className="text-xs text-gray-400 px-2 py-2 italic">No past projects</p>
               ) : (
                 projectsHistory.map((p) => {
                   const isActive = activeProject?.id === p.id;
+                  const isSelected = selectedProjectIds.includes(p.id);
                   return (
                     <div
                       key={p.id}
-                      onClick={() => handleOpenProject(p.id)}
+                      onClick={(e) => {
+                        if (isHistorySelectMode) {
+                          toggleSelectProject(p.id, e);
+                        } else {
+                          handleOpenProject(p.id);
+                        }
+                      }}
                       className={`group w-full text-left px-2.5 py-2 rounded-lg text-xs transition-all flex items-center justify-between cursor-pointer ${
-                        isActive
+                        isSelected
+                          ? 'bg-red-50 text-red-950 border border-red-300 font-medium'
+                          : isActive
                           ? 'bg-blue-50 text-blue-900 border border-blue-200 font-medium'
                           : 'text-gray-600 hover:bg-gray-100'
                       }`}
                     >
-                      <div className="truncate flex-1 pr-2 flex flex-col gap-0.5">
-                        <span className="truncate">{p.title || "Untitled Project"}</span>
-                        <span className="text-[10px] text-gray-400 flex items-center gap-1.5 font-mono">
-                          <Clock className="w-2.5 h-2.5 shrink-0" />
-                          {p.total_duration_seconds ? `${p.total_duration_seconds.toFixed(1)}s` : 'Saved'} • {p.id}
-                        </span>
+                      <div className="flex items-center gap-2 truncate flex-1 pr-2">
+                        {isHistorySelectMode && (
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={(e) => toggleSelectProject(p.id, e as any)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="rounded accent-red-600 cursor-pointer w-3.5 h-3.5 shrink-0"
+                          />
+                        )}
+                        <div className="truncate flex-1 flex flex-col gap-0.5">
+                          <span className="truncate">{p.title || "Untitled Project"}</span>
+                          <span className="text-[10px] text-gray-400 flex items-center gap-1.5 font-mono">
+                            <Clock className="w-2.5 h-2.5 shrink-0" />
+                            {p.total_duration_seconds ? `${p.total_duration_seconds.toFixed(1)}s` : 'Saved'} • {p.id}
+                          </span>
+                        </div>
                       </div>
-                      <button
-                        onClick={(e) => handleDeleteProject(e, p.id)}
-                        className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-600 transition-all rounded hover:bg-red-50 shrink-0"
-                        title="Delete project"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      {!isHistorySelectMode && (
+                        <button
+                          onClick={(e) => handleDeleteProject(e, p.id)}
+                          className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-600 transition-all rounded hover:bg-red-50 shrink-0"
+                          title="Delete project"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                   );
                 })
@@ -1096,8 +1262,6 @@ export default function App() {
                         <option value="en">English</option>
                         <option value="ur">Urdu (اردو)</option>
                         <option value="roman_urdu">Roman Urdu (اردو رومن)</option>
-                        <option value="sd">Sindhi (سنڌي)</option>
-                        <option value="roman_sindhi">Roman Sindhi (سنڌي رومن)</option>
                         <option value="hi">Hindi (हिंदी)</option>
                       </select>
                     </div>
@@ -1217,6 +1381,17 @@ export default function App() {
                 <button
                   onClick={() =>
                     setScriptText(
+                      "ایک خوبصورت شام، پرانے درختوں کے سائے میں بیٹھے دادا جان نے ماضی کے وہ سنہرے واقعات سنانا شروع کیے۔"
+                    )
+                  }
+                  className="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-full transition-all font-medium flex items-center gap-1"
+                >
+                  <span>📜</span>
+                  <span>اردو داستان (Urdu Story)</span>
+                </button>
+                <button
+                  onClick={() =>
+                    setScriptText(
                       "In 1944 during WWII, the B-25 bomber vanished over the misty mountains. Suddenly, the radio crackled with a mysterious signal."
                     )
                   }
@@ -1234,7 +1409,6 @@ export default function App() {
                 >
                   Roman Urdu Mystery
                 </button>
-
                 <button
                   onClick={() =>
                     setScriptText(
@@ -1244,16 +1418,6 @@ export default function App() {
                   className="text-[11px] bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 px-2.5 py-1 rounded-full transition-all font-medium"
                 >
                   🎭 Multi-Character Story
-                </button>
-                <button
-                  onClick={() =>
-                    setScriptText(
-                      "Welcome back. In today's deep dive, we explore how autonomous AI agents plan, execute, and verify complex multi-step workflows."
-                    )
-                  }
-                  className="text-[11px] bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 px-2.5 py-1 rounded-full transition-all"
-                >
-                  Tech Explainer
                 </button>
               </div>
 
@@ -1801,7 +1965,7 @@ export default function App() {
                             onClick={() => handleSelectVoiceAndOpen(voice.voice_id, voice.style)}
                             title="Click to select and open in Narration Studio"
                           >
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5">
                               <h4 className="font-semibold text-sm text-gray-900 hover:text-blue-600 transition-colors">{voice.name}</h4>
                               <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">
                                 {voice.locale}
@@ -1809,6 +1973,15 @@ export default function App() {
                               <span className="text-[10px] bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-medium border border-purple-100">
                                 {voice.gender}
                               </span>
+                              {(voice.is_local || voice.provider === 'local-mms') ? (
+                                <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono font-bold border border-emerald-300">
+                                  🔒 LOCAL CPU
+                                </span>
+                              ) : (
+                                <span className="text-[10px] bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded font-mono border border-sky-200">
+                                  🌐 CLOUD
+                                </span>
+                              )}
                             </div>
                             <p className="text-xs text-blue-600 font-medium">{voice.style} Narration</p>
                           </div>

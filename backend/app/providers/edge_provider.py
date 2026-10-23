@@ -20,6 +20,14 @@ class EdgeTTSProvider(BaseTTSProvider):
         self.cache_dir = cache_dir
         os.makedirs(self.cache_dir, exist_ok=True)
 
+    @property
+    def provider_id(self) -> str:
+        return "edge-tts"
+
+    @property
+    def is_local(self) -> bool:
+        return False
+
     def _get_cache_path(self, text: str, voice_id: str, rate: str, pitch: str) -> str:
         cache_key = hashlib.sha256(f"{voice_id}|{rate}|{pitch}|{text}".encode("utf-8")).hexdigest()
         return os.path.join(self.cache_dir, f"{cache_key}.mp3")

@@ -53,8 +53,13 @@ class AutonomousRepairAgent:
         chunk.rate = applied_rate
         chunk.pitch = applied_pitch
 
-        # Re-synthesize
-        res = await self.tts_provider.synthesize_chunk(
+        # Re-synthesize with appropriate provider
+        if hasattr(self.tts_provider, "get_provider_for_voice"):
+            active_provider = self.tts_provider.get_provider_for_voice(voice_id)
+        else:
+            active_provider = self.tts_provider
+
+        res = await active_provider.synthesize_chunk(
             text=chunk.normalized_text,
             voice_id=voice_id,
             rate=applied_rate,

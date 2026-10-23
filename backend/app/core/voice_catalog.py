@@ -219,32 +219,92 @@ VOICE_CATALOG: Dict[str, VoiceProfile] = {
         qc_rating=0.99
     ),
 
-    # --- SINDHI & REGIONAL INDUS CHARACTERS (سنڌي) ---
-    "vox-sindhi-male": VoiceProfile(
-        voice_id="ur-PK-AsadNeural",
-        name="Aura Sarang (سنڌي سارنگ - Sindhi Baritone)",
+    # --- LOCAL OPEN-SOURCE NEURAL VOICES (100% OFFLINE / CPU INFERENCE) ---
+    "local-mms-snd": VoiceProfile(
+        voice_id="local-mms-snd",
+        name="Aura Sarang (سنڌي مقامي - Native Sindhi VITS)",
         gender="Male",
         language="sd",
         locale="sd-PK",
         style="Documentary",
-        provider="edge-tts",
-        license_type="LICENSED_PROVIDER",
-        description="Deep, resonant, authentic voice with traditional Indus cadence for Sindhi literature, historical epics, and Roman Sindhi narration.",
+        provider="local-mms",
+        license_type="CC-BY-NC-4.0",
+        description="Authentic native Sindhi neural voice running locally on CPU. Full support for all 52 Sindhi alphabet characters.",
         is_authorized=True,
-        qc_rating=0.99
+        qc_rating=0.99,
+        is_local=True
+    ),
+    "local-mms-urd": VoiceProfile(
+        voice_id="local-mms-urd",
+        name="Aura Tariq (اردو مقامی - Native Urdu VITS)",
+        gender="Male",
+        language="ur",
+        locale="ur-PK",
+        style="Documentary",
+        provider="local-mms",
+        license_type="CC-BY-NC-4.0",
+        description="Native Urdu neural voice running locally on CPU. Zero cloud dependency.",
+        is_authorized=True,
+        qc_rating=0.98,
+        is_local=True
+    ),
+    "local-mms-hin": VoiceProfile(
+        voice_id="local-mms-hin",
+        name="Aura Aarav (हिन्दी स्थानीय - Native Hindi VITS)",
+        gender="Male",
+        language="hi",
+        locale="hi-IN",
+        style="Storyteller",
+        provider="local-mms",
+        license_type="CC-BY-NC-4.0",
+        description="Native Hindi neural voice running locally on CPU with Devanagari script support.",
+        is_authorized=True,
+        qc_rating=0.98,
+        is_local=True
+    ),
+    "local-mms-eng": VoiceProfile(
+        voice_id="local-mms-eng",
+        name="Aura Arthur (English Local VITS)",
+        gender="Male",
+        language="en",
+        locale="en-US",
+        style="Conversational",
+        provider="local-mms",
+        license_type="CC-BY-NC-4.0",
+        description="Open-source English voice running 100% locally on CPU without external API.",
+        is_authorized=True,
+        qc_rating=0.97,
+        is_local=True
+    ),
+
+    # --- SINDHI & REGIONAL INDUS CHARACTERS (سنڌي) ---
+    "vox-sindhi-male": VoiceProfile(
+        voice_id="local-mms-snd",
+        name="Aura Sarang (سنڌي مقامي - Native Sindhi)",
+        gender="Male",
+        language="sd",
+        locale="sd-PK",
+        style="Documentary",
+        provider="local-mms",
+        license_type="CC-BY-NC-4.0",
+        description="Authentic native Sindhi neural voice running locally on CPU with authentic 52-letter Perso-Arabic support.",
+        is_authorized=True,
+        qc_rating=0.99,
+        is_local=True
     ),
     "vox-sindhi-female": VoiceProfile(
         voice_id="ur-PK-UzmaNeural",
-        name="Aura Marvi (سنڌي مارئي - Sindhi Storyteller)",
+        name="Aura Marvi (Roman Sindhi / Urdu Approx)",
         gender="Female",
         language="sd",
         locale="sd-PK",
         style="Storyteller",
         provider="edge-tts",
         license_type="LICENSED_PROVIDER",
-        description="Melodious, expressive voice with authentic lyrical Sindhi inflection for folklore, Shah jo Risalo, and warm dialogues.",
+        description="Urdu neural voice used for Roman Sindhi approximation. For authentic Sindhi script, use Aura Sarang (Native Sindhi VITS).",
         is_authorized=True,
-        qc_rating=0.99
+        qc_rating=0.90,
+        is_local=False
     ),
 
     # --- HINDI & HINGLISH CHARACTERS ---
@@ -331,12 +391,16 @@ def rank_voices_for_script(
         reasons = []
 
         # Language match
-        if any(term in lang_lower for term in ["sd", "sindhi"]) and (v.language == "sd" or "sindhi" in v.name.lower() or "sindhi" in v.description.lower()):
-            score += 0.40
-            reasons.append("Native Sindhi / Regional Indus cadence")
+        if any(term in lang_lower for term in ["sd", "sindhi"]) and v.language == "sd":
+            if v.is_local or v.provider == "local-mms":
+                score += 0.55
+                reasons.append("Authentic Native Sindhi (Meta MMS Local CPU)")
+            else:
+                score += 0.25
+                reasons.append("Sindhi narrative profile (Approximate)")
         elif any(term in lang_lower for term in ["sd", "sindhi"]) and v.language == "ur":
-            score += 0.30
-            reasons.append("South Asian regional phonetic alignment for Sindhi")
+            score += 0.05
+            reasons.append("Urdu fallback (Not authentic Sindhi)")
         elif (lang_lower in ["ur", "roman_urdu"] or lang_lower.startswith("ur-") or "urdu" in lang_lower or (lang_lower == "roman")) and v.language == "ur":
             score += 0.35
             reasons.append("Native Urdu / Roman Urdu enunciation")

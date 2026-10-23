@@ -14,6 +14,7 @@ from ..core.voice_catalog import (
     rank_voices_for_script, verify_voice_consent_and_policy
 )
 from ..providers.edge_provider import EdgeTTSProvider
+from ..providers.registry import provider_registry
 from ..agents.script_intelligence import ScriptIntelligenceAgent
 from ..agents.speech_planner import SpeechPlannerAgent
 from ..agents.emotion_performance import EmotionPerformanceAgent
@@ -41,14 +42,15 @@ class CentralOrchestrator:
         os.makedirs(self.exports_dir, exist_ok=True)
 
         self.db = db_manager or DatabaseManager()
-        self.tts_provider = EdgeTTSProvider()
+        self.provider_registry = provider_registry
+        self.tts_provider = provider_registry.edge_provider
         self.script_agent = ScriptIntelligenceAgent()
         self.pronunciation_agent = PronunciationAgent()
         self.emotion_agent = EmotionPerformanceAgent()
         self.speech_planner = SpeechPlannerAgent(self.emotion_agent, self.pronunciation_agent, self.script_agent)
         self.audio_processor = AudioProcessorAgent()
         self.qc_agent = AutonomousQCAgent()
-        self.repair_agent = AutonomousRepairAgent(self.tts_provider, self.audio_processor, self.qc_agent)
+        self.repair_agent = AutonomousRepairAgent(self.provider_registry, self.audio_processor, self.qc_agent)
         self.timing_agent = TimingAlignmentAgent()
         self.memory_agent = MemoryAgent(self.storage_dir)
 
@@ -214,7 +216,10 @@ class CentralOrchestrator:
                 if project_id in self.cancelled_projects:
                     return
 
-                res = await self.tts_provider.synthesize_chunk(
+                active_provider = self.provider_registry.get_provider_for_voice(
+                    chunk_voice, requested_provider=getattr(chunk, "provider", None) or getattr(request, "provider", None)
+                )
+                res = await active_provider.synthesize_chunk(
                     text=chunk.spoken_text or chunk.normalized_text,
                     voice_id=chunk_voice,
                     rate=chunk.rate,
@@ -222,7 +227,18 @@ class CentralOrchestrator:
                     output_path=chunk_file
                 )
 
-                if res["success"]:
+                # Fallback resilience: If local model is pending weights download, use online provider immediately
+                if not res.get("success") and active_provider.is_local:
+                    fallback_voice = "ur-PK-AsadNeural" if any(k in chunk_voice for k in ["snd", "urd"]) else ("hi-IN-MadhurNeural" if "hin" in chunk_voice else "en-US-ChristopherNeural")
+                    res = await self.tts_provider.synthesize_chunk(
+                        text=chunk.spoken_text or chunk.normalized_text,
+                        voice_id=fallback_voice,
+                        rate=chunk.rate,
+                        pitch=chunk.pitch,
+                        output_path=chunk_file
+                    )
+
+                if res.get("success"):
                     chunk.duration = await asyncio.to_thread(self.audio_processor.get_audio_duration, chunk_file)
                 else:
                     chunk.duration = 0.0

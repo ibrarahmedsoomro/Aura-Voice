@@ -19,6 +19,7 @@ class VoiceProfile(BaseModel):
     description: str = ""
     is_authorized: bool = True
     qc_rating: float = 0.98
+    is_local: bool = False
 
 class ProjectCharacter(BaseModel):
     character_id: str
